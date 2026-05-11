@@ -4,719 +4,328 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Summit Web — Go Digital Without the Headache</title>
-<meta name="description" content="Summit Web is Nigeria's trusted digital partner. We build professional websites, mobile apps, and digital solutions for businesses across Nigeria and beyond." />
+<meta name="description" content="Summit Web is Nigeria's simple, headache-free digital partner. Professional websites, branding, SEO, social media & more. Based in Jos, serving Nigeria & beyond." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9A84C;--gold-light:#F0D592;--gold-dark:#8A6820;
+  --ink:#0E0E0E;--ink-2:#1A1A1A;--ink-3:#2C2C2C;
+  --muted:#6B6B6B;--muted-2:#9A9A9A;
+  --surface:#F7F4EE;--surface-2:#EDE9DF;
+  --white:#FFFFFF;--green:#16a34a;--red:#dc2626;--orange:#d97706;
+  --border:rgba(0,0,0,0.10);--border-strong:rgba(0,0,0,0.18);
+  --ff-head:'Fraunces',Georgia,serif;--ff-body:'DM Sans',sans-serif;
+  --radius:4px;--radius-lg:14px;--max:1160px;--nav-h:70px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--ff-body);font-size:16px;line-height:1.7;color:var(--ink);background:var(--white);overflow-x:hidden;}
 
-  :root {
-    --gold: #C9A84C;
-    --gold-light: #F0D592;
-    --gold-dark: #8A6820;
-    --ink: #0E0E0E;
-    --ink-2: #1A1A1A;
-    --ink-3: #2C2C2C;
-    --muted: #6B6B6B;
-    --muted-2: #9A9A9A;
-    --surface: #F7F4EE;
-    --surface-2: #EDE9DF;
-    --white: #FFFFFF;
-    --border: rgba(0,0,0,0.10);
-    --border-strong: rgba(0,0,0,0.18);
-    --ff-head: 'Fraunces', Georgia, serif;
-    --ff-body: 'DM Sans', sans-serif;
-    --radius: 4px;
-    --radius-lg: 12px;
-    --max: 1160px;
-    --nav-h: 72px;
-  }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);transition:box-shadow 0.3s;}
+nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,0.08);}
+.nav-inner{max-width:var(--max);width:100%;margin:0 auto;padding:0 2rem;height:100%;display:flex;align-items:center;justify-content:space-between;}
+.logo{display:flex;align-items:center;cursor:pointer;}
+.logo img{height:40px;width:auto;display:block;}
+.logo-fallback{align-items:center;gap:0.4rem;font-family:var(--ff-head);font-size:1.35rem;font-weight:700;letter-spacing:-0.01em;color:var(--ink);}
+.logo-icon-s{width:32px;height:32px;background:var(--ink);color:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:0.95rem;position:relative;overflow:hidden;flex-shrink:0;}
+.logo-icon-s::after{content:'';position:absolute;bottom:0;left:0;right:0;height:11px;background:#fff;clip-path:polygon(0 100%,50% 30%,100% 100%);}
+.logo span.gold{color:var(--gold);}
+.nav-links{display:flex;align-items:center;gap:2rem;list-style:none;}
+.nav-links a,.nav-links button{font-size:0.875rem;font-weight:400;color:var(--ink-3);text-decoration:none;letter-spacing:0.01em;transition:color 0.2s;cursor:pointer;background:none;border:none;font-family:var(--ff-body);}
+.nav-links a:hover,.nav-links button:hover{color:var(--gold-dark);}
+.nav-cta{background:var(--ink)!important;color:var(--white)!important;padding:0.5rem 1.2rem!important;border-radius:2px!important;font-size:0.78rem!important;font-weight:500!important;letter-spacing:0.06em!important;text-transform:uppercase!important;}
+.nav-cta:hover{background:var(--gold-dark)!important;color:var(--white)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink);transition:0.3s;}
 
-  html { scroll-behavior: smooth; }
+/* ROUTING */
+.page{display:none;}.page.active{display:block;}
 
-  body {
-    font-family: var(--ff-body);
-    font-size: 16px;
-    line-height: 1.7;
-    color: var(--ink);
-    background: var(--white);
-    overflow-x: hidden;
-  }
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:0.4rem;background:var(--ink);color:var(--white);padding:0.875rem 1.75rem;border-radius:2px;font-size:0.82rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s;font-family:var(--ff-body);}
+.btn-primary:hover{background:var(--gold-dark);transform:translateY(-1px);}
+.btn-secondary{display:inline-flex;align-items:center;background:transparent;color:var(--ink);padding:0.875rem 1.75rem;border:1px solid var(--border-strong);border-radius:2px;font-size:0.82rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:0.2s;font-family:var(--ff-body);}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold-dark);transform:translateY(-1px);}
+.btn-gold{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold);color:var(--ink);padding:0.9rem 2rem;border-radius:2px;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:background 0.2s,transform 0.15s;font-family:var(--ff-body);}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px);}
+.btn-sm{padding:0.5rem 1rem!important;font-size:0.78rem!important;}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red);padding:0.5rem 1rem;border-radius:2px;font-family:var(--ff-body);font-size:0.8rem;cursor:pointer;transition:0.2s;}
+.btn-danger:hover{background:var(--red);color:var(--white);}
 
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    height: var(--nav-h);
-    display: flex; align-items: center;
-    background: rgba(255,255,255,0.88);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.3s;
-  }
-  .nav-inner {
-    max-width: var(--max); width: 100%; margin: 0 auto;
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .logo {
-    font-family: var(--ff-head);
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--ink);
-    text-decoration: none;
-    letter-spacing: -0.01em;
-  }
-  .logo span { color: var(--gold); }
-  .nav-links {
-    display: flex; align-items: center; gap: 2.2rem;
-    list-style: none;
-  }
-  .nav-links a {
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--ink-3);
-    text-decoration: none;
-    letter-spacing: 0.02em;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--gold-dark); }
-  .nav-cta {
-    background: var(--ink) !important;
-    color: var(--white) !important;
-    padding: 0.5rem 1.25rem;
-    border-radius: 2px;
-    font-size: 0.8rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--gold-dark) !important; color: var(--white) !important; }
-  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
-  .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); transition: 0.3s; }
+/* HERO */
+.hero-section{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;padding-top:var(--nav-h);}
+.hero-left{background:var(--surface);display:flex;align-items:center;padding:5rem 3rem;}
+.hero-left-inner{max-width:520px;margin-left:auto;}
+.hero-right{position:relative;overflow:hidden;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.72rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:1.5rem;}
+.hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--gold);}
+.hero-h1{font-family:var(--ff-head);font-size:clamp(2.4rem,4vw,3.6rem);font-weight:700;line-height:1.08;letter-spacing:-0.025em;color:var(--ink);margin-bottom:1.25rem;}
+.hero-h1 em{font-style:italic;font-weight:300;color:var(--gold-dark);}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:440px;margin-bottom:2.25rem;line-height:1.82;}
+.hero-actions{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:2rem;margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border);}
+.hero-stat-num{font-family:var(--ff-head);font-size:1.9rem;font-weight:700;color:var(--ink);display:block;}
+.hero-stat-label{font-size:0.75rem;color:var(--muted);}
+.hero-float-card{position:absolute;bottom:2rem;left:-1.5rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:0.875rem 1.25rem;box-shadow:0 8px 32px rgba(0,0,0,0.12);min-width:175px;animation:floatCard 3.5s ease-in-out infinite alternate;}
+@keyframes floatCard{from{transform:translateY(0);}to{transform:translateY(-8px);}}
+.float-card-label{font-size:0.68rem;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;}
+.float-card-val{font-family:var(--ff-head);font-size:1.35rem;font-weight:700;color:var(--ink);line-height:1.2;}
+.float-card-sub{font-size:0.73rem;color:var(--gold-dark);font-weight:500;}
 
-  /* ─── HERO ─── */
-  #home {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding-top: var(--nav-h);
-    background: var(--surface);
-    overflow: hidden;
-    position: relative;
-  }
-  .hero-bg-circle {
-    position: absolute;
-    width: 640px; height: 640px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-    right: -80px; top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  .hero-content {
-    max-width: var(--max); margin: 0 auto;
-    padding: 5rem 2rem 5rem 2rem;
-    grid-column: 1 / 2;
-    position: relative; z-index: 2;
-  }
-  .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--gold-dark);
-    margin-bottom: 1.5rem;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block; width: 28px; height: 1px;
-    background: var(--gold);
-  }
-  .hero-h1 {
-    font-family: var(--ff-head);
-    font-size: clamp(2.6rem, 5vw, 4rem);
-    font-weight: 700;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin-bottom: 1.5rem;
-  }
-  .hero-h1 em {
-    font-style: italic;
-    color: var(--gold-dark);
-    font-weight: 300;
-  }
-  .hero-sub {
-    font-size: 1.05rem;
-    color: var(--muted);
-    max-width: 460px;
-    margin-bottom: 2.5rem;
-    line-height: 1.75;
-  }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: var(--ink);
-    color: var(--white);
-    padding: 0.875rem 2rem;
-    border-radius: 2px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: var(--gold-dark); transform: translateY(-1px); }
-  .btn-secondary {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: transparent;
-    color: var(--ink);
-    padding: 0.875rem 2rem;
-    border: 1px solid var(--border-strong);
-    border-radius: 2px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s, transform 0.15s;
-  }
-  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-dark); transform: translateY(-1px); }
-  .hero-stats {
-    display: flex; gap: 2.5rem;
-    margin-top: 3.5rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-  }
-  .hero-stat-num {
-    font-family: var(--ff-head);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--ink);
-    display: block;
-  }
-  .hero-stat-label {
-    font-size: 0.78rem;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
+/* MARQUEE */
+.marquee-wrap{background:var(--ink);padding:0.875rem 0;overflow:hidden;white-space:nowrap;}
+.marquee-track{display:inline-flex;animation:marquee 24s linear infinite;}
+.marquee-item{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;padding:0 2rem;color:var(--muted-2);}
+.marquee-dot{color:var(--gold);margin-right:2rem;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
-  /* hero image panel */
-  .hero-visual {
-    position: relative;
-    height: 100%;
-    min-height: 520px;
-    overflow: hidden;
-  }
-  .hero-visual img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-  .hero-visual-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to right, var(--surface) 0%, transparent 30%);
-  }
-  .hero-card {
-    position: absolute;
-    bottom: 2.5rem; left: -2rem;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1rem 1.25rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-    min-width: 190px;
-    animation: floatUp 3.5s ease-in-out infinite alternate;
-  }
-  @keyframes floatUp {
-    from { transform: translateY(0); }
-    to   { transform: translateY(-8px); }
-  }
-  .hero-card-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
-  .hero-card-val { font-family: var(--ff-head); font-size: 1.5rem; font-weight: 700; color: var(--ink); }
-  .hero-card-sub { font-size: 0.78rem; color: var(--gold-dark); font-weight: 500; }
+/* SECTIONS */
+section{padding:5.5rem 2rem;}
+.container{max-width:var(--max);margin:0 auto;}
+.section-tag{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.68rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:0.875rem;}
+.section-tag::before{content:'';display:block;width:18px;height:1px;background:var(--gold);}
+.section-h2{font-family:var(--ff-head);font-size:clamp(1.8rem,3vw,2.55rem);font-weight:700;line-height:1.12;letter-spacing:-0.02em;color:var(--ink);margin-bottom:0.875rem;}
+.section-h2 em{font-style:italic;font-weight:300;color:var(--gold-dark);}
+.section-lead{font-size:0.975rem;color:var(--muted);max-width:520px;line-height:1.8;}
 
-  /* ─── MARQUEE ─── */
-  .marquee-wrap {
-    background: var(--ink);
-    color: var(--white);
-    padding: 1rem 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .marquee-track {
-    display: inline-flex;
-    animation: marquee 26s linear infinite;
-  }
-  .marquee-item {
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0 2.5rem;
-    color: var(--muted-2);
-  }
-  .marquee-item span { color: var(--gold); margin-right: 2.5rem; }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
+/* TRUST */
+.trust-bar{background:var(--surface);padding:2.5rem 2rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.trust-bar-inner{max-width:var(--max);margin:0 auto;text-align:center;}
+.trust-label{font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.25rem;}
+.trust-logos{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.trust-logo{padding:0.5rem 1.25rem;background:var(--white);border:1px solid var(--border-strong);border-radius:2px;font-size:0.82rem;font-weight:500;color:var(--ink-3);}
 
-  /* ─── SECTION COMMON ─── */
-  section { padding: 6rem 2rem; }
-  .container { max-width: var(--max); margin: 0 auto; }
-  .section-tag {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--gold-dark);
-    margin-bottom: 1rem;
-  }
-  .section-tag::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
-  .section-h2 {
-    font-family: var(--ff-head);
-    font-size: clamp(1.9rem, 3.5vw, 2.8rem);
-    font-weight: 700;
-    line-height: 1.13;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin-bottom: 1rem;
-  }
-  .section-h2 em { font-style: italic; font-weight: 300; color: var(--gold-dark); }
-  .section-lead {
-    font-size: 1rem;
-    color: var(--muted);
-    max-width: 520px;
-    line-height: 1.8;
-  }
+/* PS */
+.ps-section{background:var(--white);}
+.ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem;}
+.ps-card{padding:2.25rem 2rem;border-radius:var(--radius-lg);border:1px solid var(--border);border-left:3px solid var(--ink);transition:transform 0.25s,box-shadow 0.25s;}
+.ps-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.18);}
+.ps-icon{margin-bottom:0.875rem;display:block;}
+.ps-card h3{font-family:var(--ff-head);font-size:1.15rem;font-weight:700;color:var(--ink);margin-bottom:0.6rem;}
+.ps-card p{font-size:0.9rem;color:var(--muted);line-height:1.8;}
 
-  /* ─── SERVICES ─── */
-  #services { background: var(--white); }
-  .services-intro { margin-bottom: 3.5rem; }
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .service-card {
-    background: var(--white);
-    padding: 2.5rem 2rem;
-    position: relative;
-    transition: background 0.25s;
-    cursor: default;
-  }
-  .service-card:hover { background: var(--surface); }
-  .service-icon {
-    width: 48px; height: 48px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 1.25rem;
-    background: var(--surface);
-    color: var(--gold-dark);
-  }
-  .service-title {
-    font-family: var(--ff-head);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 0.6rem;
-    line-height: 1.3;
-  }
-  .service-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
-  .service-arrow {
-    position: absolute;
-    bottom: 1.5rem; right: 1.75rem;
-    font-size: 1.1rem;
-    color: var(--gold);
-    opacity: 0;
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .service-card:hover .service-arrow { opacity: 1; transform: translate(3px, -3px); }
+/* SERVICES */
+.services-section{background:var(--surface);}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:3rem;}
+.service-card{background:var(--white);padding:2rem 1.75rem;position:relative;transition:background 0.22s;}
+.service-card:hover{background:var(--surface);}
+.svc-icon{width:44px;height:44px;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;background:var(--surface-2);border-radius:var(--radius);padding:9px;flex-shrink:0;}
+.svc-icon svg{width:100%;height:100%;stroke:var(--gold-dark);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.service-card h3{font-family:var(--ff-head);font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:0.4rem;line-height:1.3;}
+.service-card p{font-size:0.84rem;color:var(--muted);line-height:1.7;}
+.svc-arrow{position:absolute;bottom:1.25rem;right:1.5rem;color:var(--gold);font-size:1rem;opacity:0;transition:0.2s;}
+.service-card:hover .svc-arrow{opacity:1;transform:translate(3px,-3px);}
 
-  /* ─── WHY US / PROCESS ─── */
-  #process {
-    background: var(--ink);
-    color: var(--white);
-  }
-  #process .section-h2 { color: var(--white); }
-  #process .section-lead { color: var(--muted-2); }
-  #process .section-tag { color: var(--gold-light); }
-  #process .section-tag::before { background: var(--gold); }
-  .process-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: center;
-    margin-top: 3.5rem;
-  }
-  .process-steps { display: flex; flex-direction: column; gap: 0; }
-  .process-step {
-    display: flex; gap: 1.5rem;
-    padding: 1.75rem 0;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    transition: background 0.2s;
-  }
-  .process-step:last-child { border-bottom: none; }
-  .step-num {
-    font-family: var(--ff-head);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--gold);
-    opacity: 0.35;
-    line-height: 1;
-    flex-shrink: 0;
-    min-width: 2rem;
-    transition: opacity 0.2s;
-  }
-  .process-step:hover .step-num { opacity: 1; }
-  .step-title {
-    font-family: var(--ff-head);
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--white);
-    margin-bottom: 0.4rem;
-  }
-  .step-desc { font-size: 0.875rem; color: var(--muted-2); line-height: 1.7; }
-  .process-visual {
-    position: relative;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .process-visual img {
-    width: 100%;
-    aspect-ratio: 4/5;
-    object-fit: cover;
-    border-radius: var(--radius-lg);
-    display: block;
-    filter: brightness(0.85) contrast(1.05);
-  }
-  .process-visual-badge {
-    position: absolute;
-    top: 1.5rem; left: 1.5rem;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.3);
-    backdrop-filter: blur(8px);
-    border-radius: 2px;
-    padding: 0.5rem 1rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
+/* TESTIMONIAL */
+.testimonial-section{background:var(--white);text-align:center;}
+.testimonial-card{max-width:680px;margin:3rem auto 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:3rem;}
+.testi-quote{font-family:var(--ff-head);font-size:4rem;color:var(--gold);line-height:1;opacity:0.6;margin-bottom:0.5rem;}
+.testi-text{font-family:var(--ff-head);font-size:1.2rem;font-style:italic;font-weight:300;color:var(--ink-3);line-height:1.7;margin-bottom:1.5rem;}
+.testi-author{font-weight:500;font-size:0.9rem;color:var(--ink);}
+.testi-role{font-size:0.8rem;color:var(--muted);}
 
-  /* ─── PRICING ─── */
-  #pricing { background: var(--surface); }
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-    margin-top: 3.5rem;
-    align-items: start;
-  }
-  .pricing-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2.25rem 2rem;
-    position: relative;
-    transition: box-shadow 0.25s, transform 0.25s;
-  }
-  .pricing-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.08); transform: translateY(-3px); }
-  .pricing-card.featured {
-    background: var(--ink);
-    border-color: var(--gold-dark);
-    color: var(--white);
-  }
-  .pricing-card.featured:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.25); }
-  .featured-badge {
-    position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-    background: var(--gold);
-    color: var(--ink);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.3rem 1rem;
-    border-radius: 2px;
-  }
-  .plan-name {
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold-dark);
-    font-weight: 500;
-    margin-bottom: 1rem;
-  }
-  .pricing-card.featured .plan-name { color: var(--gold-light); }
-  .plan-price {
-    font-family: var(--ff-head);
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1;
-    margin-bottom: 0.4rem;
-  }
-  .pricing-card.featured .plan-price { color: var(--white); }
-  .plan-price-note { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
-  .pricing-card.featured .plan-price-note { color: var(--muted-2); }
-  .plan-divider { height: 1px; background: var(--border); margin-bottom: 1.5rem; }
-  .pricing-card.featured .plan-divider { background: rgba(255,255,255,0.12); }
-  .plan-feature {
-    display: flex; align-items: flex-start; gap: 0.75rem;
-    font-size: 0.875rem; color: var(--ink-3);
-    margin-bottom: 0.75rem;
-    line-height: 1.5;
-  }
-  .pricing-card.featured .plan-feature { color: rgba(255,255,255,0.82); }
-  .plan-check { color: var(--gold-dark); flex-shrink: 0; margin-top: 3px; }
-  .pricing-card.featured .plan-check { color: var(--gold-light); }
-  .plan-cta {
-    display: block;
-    text-align: center;
-    margin-top: 2rem;
-    padding: 0.875rem;
-    border-radius: 2px;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: 0.2s;
-    border: 1px solid var(--border-strong);
-    color: var(--ink);
-    background: transparent;
-  }
-  .plan-cta:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
-  .pricing-card.featured .plan-cta {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--ink);
-  }
-  .pricing-card.featured .plan-cta:hover { background: var(--gold-light); }
+/* PRICING */
+.pricing-section{background:var(--surface);}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:3rem;align-items:start;}
+.pricing-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.25rem 2rem;position:relative;transition:box-shadow 0.25s,transform 0.25s;}
+.pricing-card:hover{box-shadow:0 16px 48px rgba(0,0,0,0.08);transform:translateY(-3px);}
+.pricing-card.featured{background:var(--ink);border-color:var(--gold-dark);}
+.pricing-card.featured:hover{box-shadow:0 16px 48px rgba(0,0,0,0.28);}
+.popular-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--ink);font-size:0.65rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 1rem;border-radius:2px;white-space:nowrap;}
+.plan-name{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold-dark);font-weight:500;margin-bottom:0.875rem;}
+.pricing-card.featured .plan-name{color:var(--gold-light);}
+.plan-price{font-family:var(--ff-head);font-size:2.4rem;font-weight:700;color:var(--ink);line-height:1;margin-bottom:0.3rem;}
+.pricing-card.featured .plan-price{color:var(--white);}
+.plan-period{font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;}
+.pricing-card.featured .plan-period{color:var(--muted-2);}
+.plan-divider{height:1px;background:var(--border);margin-bottom:1.5rem;}
+.pricing-card.featured .plan-divider{background:rgba(255,255,255,0.12);}
+.plan-features{list-style:none;margin-bottom:2rem;}
+.plan-features li{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.875rem;color:var(--ink-3);padding:0.5rem 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.pricing-card.featured .plan-features li{color:rgba(255,255,255,0.82);border-bottom-color:rgba(255,255,255,0.1);}
+.plan-features li:last-child{border-bottom:none;}
+.chk{color:var(--green);font-weight:700;flex-shrink:0;}
+.crs{color:var(--red);font-weight:700;flex-shrink:0;}
+.plan-btn{display:block;width:100%;text-align:center;padding:0.875rem;border-radius:2px;font-size:0.82rem;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;transition:0.2s;border:1px solid var(--border-strong);color:var(--ink);background:transparent;font-family:var(--ff-body);}
+.plan-btn:hover{background:var(--ink);color:var(--white);border-color:var(--ink);}
+.pricing-card.featured .plan-btn{background:var(--gold);border-color:var(--gold);color:var(--ink);}
+.pricing-card.featured .plan-btn:hover{background:var(--gold-light);}
 
-  /* ─── TESTIMONIALS ─── */
-  #testimonials { background: var(--white); }
-  .testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-    margin-top: 3.5rem;
-  }
-  .testimonial-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-  }
-  .testimonial-quote {
-    font-family: var(--ff-head);
-    font-size: 2.5rem;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 1rem;
-  }
-  .testimonial-text {
-    font-size: 0.9rem;
-    color: var(--ink-3);
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    font-style: italic;
-  }
-  .testimonial-author { display: flex; align-items: center; gap: 0.75rem; }
-  .author-avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--surface-2);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 500; font-size: 0.8rem;
-    color: var(--gold-dark);
-    border: 1px solid var(--border-strong);
-    flex-shrink: 0;
-  }
-  .author-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
-  .author-role { font-size: 0.75rem; color: var(--muted); }
+/* FAQ */
+.faq-item{margin-bottom:0.75rem;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.faq-q{width:100%;padding:1.25rem 1.5rem;background:var(--white);border:none;font-family:var(--ff-body);font-size:0.95rem;font-weight:500;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;transition:background 0.2s;}
+.faq-q:hover{background:var(--surface);}
+.faq-icon{font-size:1.2rem;transition:transform 0.3s;color:var(--gold-dark);flex-shrink:0;margin-left:1rem;}
+.faq-q.faq-open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease;background:var(--surface);font-size:0.9rem;color:var(--muted);line-height:1.8;}
+.faq-a.faq-open{max-height:220px;padding:1.25rem 1.5rem;}
 
-  /* ─── CONTACT ─── */
-  #contact { background: var(--surface); }
-  .contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-  }
-  .contact-info-item {
-    display: flex; gap: 1rem; align-items: flex-start;
-    margin-bottom: 1.5rem;
-  }
-  .contact-icon {
-    width: 40px; height: 40px; border-radius: var(--radius);
-    background: var(--white);
-    border: 1px solid var(--border-strong);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
-    flex-shrink: 0;
-    color: var(--gold-dark);
-  }
-  .contact-label { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.25rem; }
-  .contact-val { font-size: 0.95rem; color: var(--ink); font-weight: 500; text-decoration: none; }
-  .contact-val:hover { color: var(--gold-dark); }
+/* CTA */
+.cta-banner{background:var(--ink);color:var(--white);text-align:center;padding:4rem 2rem;}
+.cta-banner h2{font-family:var(--ff-head);font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;margin-bottom:0.75rem;}
+.cta-banner p{color:var(--muted-2);font-size:1rem;margin-bottom:2rem;}
 
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-field label { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--muted); }
-  .form-field input,
-  .form-field select,
-  .form-field textarea {
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius);
-    background: var(--white);
-    font-family: var(--ff-body);
-    font-size: 0.9rem;
-    color: var(--ink);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none;
-    -webkit-appearance: none;
-  }
-  .form-field input:focus,
-  .form-field select:focus,
-  .form-field textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
-  }
-  .form-field textarea { resize: vertical; min-height: 120px; }
-  .form-submit {
-    align-self: flex-start;
-    background: var(--ink);
-    color: var(--white);
-    border: none;
-    padding: 0.9rem 2.25rem;
-    border-radius: 2px;
-    font-family: var(--ff-body);
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .form-submit:hover { background: var(--gold-dark); transform: translateY(-1px); }
+/* CONTACT */
+.contact-section{background:var(--surface);}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem;}
+.contact-methods{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem;}
+.contact-method{display:flex;gap:1rem;align-items:center;padding:1.25rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;text-decoration:none;transition:border-color 0.2s,transform 0.2s;}
+.contact-method:hover{border-color:var(--gold);transform:translateX(4px);}
+.cmethod-icon{width:44px;height:44px;border-radius:50%;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cmethod-label{font-size:0.72rem;color:var(--muted);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:0.15rem;}
+.cmethod-val{font-size:0.9rem;font-weight:500;color:var(--ink);}
+.cmethod-sub{font-size:0.77rem;color:var(--muted-2);}
+.contact-form{display:flex;flex-direction:column;gap:1rem;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-field{display:flex;flex-direction:column;gap:0.35rem;}
+.form-field label{font-size:0.75rem;font-weight:500;color:var(--muted);letter-spacing:0.03em;}
+.form-field input,.form-field select,.form-field textarea{padding:0.75rem 1rem;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--white);font-family:var(--ff-body);font-size:0.9rem;color:var(--ink);transition:border-color 0.2s,box-shadow 0.2s;outline:none;-webkit-appearance:none;}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+.form-field textarea{resize:vertical;min-height:110px;}
+.form-submit{align-self:flex-start;background:var(--ink);color:var(--white);border:none;padding:0.9rem 2rem;border-radius:2px;font-family:var(--ff-body);font-size:0.82rem;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;cursor:pointer;transition:background 0.2s,transform 0.15s;}
+.form-submit:hover{background:var(--gold-dark);transform:translateY(-1px);}
+.form-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
 
-  /* ─── FOOTER ─── */
-  footer {
-    background: var(--ink);
-    color: rgba(255,255,255,0.55);
-    padding: 4rem 2rem 2rem;
-  }
-  .footer-inner { max-width: var(--max); margin: 0 auto; }
-  .footer-top {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1fr;
-    gap: 3rem;
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-  .footer-brand .logo { color: var(--white); display: block; margin-bottom: 0.75rem; }
-  .footer-brand p { font-size: 0.85rem; line-height: 1.75; max-width: 240px; }
-  .footer-col-title {
-    font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-    color: rgba(255,255,255,0.9); margin-bottom: 1rem; font-weight: 500;
-  }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-  .footer-links a { font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--gold-light); }
-  .footer-bottom {
-    padding-top: 2rem;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 0.78rem;
-    flex-wrap: wrap; gap: 1rem;
-  }
-  .footer-socials { display: flex; gap: 1rem; }
-  .footer-social {
-    width: 34px; height: 34px;
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 2px;
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-    transition: 0.2s;
-  }
-  .footer-social:hover { border-color: var(--gold); color: var(--gold-light); }
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--surface);padding:6rem 2rem 3rem;}
+.auth-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;width:100%;max-width:420px;}
+.auth-card h2{font-family:var(--ff-head);font-size:1.6rem;font-weight:700;color:var(--ink);margin-bottom:0.4rem;}
+.auth-card>p{font-size:0.875rem;color:var(--muted);margin-bottom:2rem;}
+.auth-form{display:flex;flex-direction:column;gap:1rem;}
+.auth-submit{background:var(--ink);color:var(--white);border:none;padding:0.9rem;border-radius:2px;width:100%;font-family:var(--ff-body);font-size:0.88rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;transition:background 0.2s;margin-top:0.5rem;}
+.auth-submit:hover{background:var(--gold-dark);}
+.auth-footer{text-align:center;font-size:0.85rem;color:var(--muted);margin-top:1.5rem;}
+.auth-footer a{color:var(--gold-dark);text-decoration:none;font-weight:500;cursor:pointer;}
 
-  /* ─── WHATSAPP FAB ─── */
-  .wa-fab {
-    position: fixed;
-    bottom: 2rem; right: 2rem;
-    width: 56px; height: 56px;
-    background: #25D366;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none;
-    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-    z-index: 999;
-    transition: transform 0.2s, box-shadow 0.2s;
-    animation: pulse 2.5s ease-in-out infinite;
-  }
-  .wa-fab:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(37,211,102,0.5); }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
-    50% { box-shadow: 0 4px 28px rgba(37,211,102,0.65); }
-  }
-  .wa-fab svg { width: 28px; height: 28px; fill: white; }
+/* SHARED DASHBOARD STYLES */
+.db-wrap{min-height:100vh;background:var(--surface);padding:calc(var(--nav-h) + 2rem) 2rem 3rem;}
+.db-inner{max-width:900px;margin:0 auto;}
+.db-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+.db-h1{font-family:var(--ff-head);font-size:2rem;font-weight:700;color:var(--ink);}
+.db-h1 span{font-size:1rem;font-weight:400;color:var(--muted);font-family:var(--ff-body);display:block;margin-top:0.2rem;}
+.db-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:1.25rem;}
+.db-card h3{font-family:var(--ff-head);font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:1.25rem;}
+.db-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.db-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.25rem;}
+.db-stat{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;}
+.db-stat-num{font-family:var(--ff-head);font-size:1.75rem;font-weight:700;color:var(--ink);line-height:1;}
+.db-stat-label{font-size:0.75rem;color:var(--muted);margin-top:0.3rem;}
+.db-stat-sub{font-size:0.72rem;margin-top:0.25rem;}
+.sub-up{color:var(--green);}.sub-dn{color:var(--red);}.sub-warn{color:var(--orange);}
 
-  /* ─── SCROLL REVEAL ─── */
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
-  }
-  [data-reveal].visible { opacity: 1; transform: translateY(0); }
-  [data-delay="1"] { transition-delay: 0.08s; }
-  [data-delay="2"] { transition-delay: 0.16s; }
-  [data-delay="3"] { transition-delay: 0.24s; }
-  [data-delay="4"] { transition-delay: 0.32s; }
-  [data-delay="5"] { transition-delay: 0.40s; }
-  [data-delay="6"] { transition-delay: 0.48s; }
+/* BADGES */
+.badge{display:inline-block;padding:0.25rem 0.75rem;border-radius:2px;font-size:0.68rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;}
+.badge-active{background:#dcfce7;color:#166534;}
+.badge-inactive{background:#fee2e2;color:#991b1b;}
+.badge-cancelled{background:#fef3c7;color:#92400e;}
+.badge-open{background:#dbeafe;color:#1e40af;}
+.badge-review{background:#fef3c7;color:#92400e;}
+.badge-resolved{background:#dcfce7;color:#166534;}
+.badge-new{background:#dbeafe;color:#1e40af;}
+.badge-contacted{background:#dcfce7;color:#166534;}
+.badge-converted{background:#dcfce7;color:#166534;}
+.badge-lost{background:#fee2e2;color:#991b1b;}
 
-  /* ─── MOBILE ─── */
-  @media (max-width: 900px) {
-    #home { grid-template-columns: 1fr; }
-    .hero-visual { display: none; }
-    .hero-content { grid-column: 1; padding: 3rem 1.5rem; }
-    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
-    .services-grid { grid-template-columns: 1fr; }
-    .process-layout { grid-template-columns: 1fr; gap: 3rem; }
-    .process-visual { display: none; }
-    .pricing-grid { grid-template-columns: 1fr; }
-    .testimonials-grid { grid-template-columns: 1fr; }
-    .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    nav.open .nav-links {
-      display: flex; flex-direction: column;
-      position: absolute; top: var(--nav-h); left: 0; right: 0;
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 1.5rem 2rem;
-      gap: 1.25rem;
-    }
-  }
-  @media (max-width: 600px) {
-    section { padding: 4rem 1.25rem; }
-    .footer-top { grid-template-columns: 1fr; }
-    .footer-bottom { flex-direction: column; text-align: center; }
-  }
+/* PROJECT TRACKER */
+.tracker{display:flex;align-items:flex-start;position:relative;margin:1rem 0 0.5rem;}
+.tracker-line{position:absolute;top:13px;left:13px;right:13px;height:2px;background:var(--border);}
+.tracker-fill{position:absolute;top:13px;left:13px;height:2px;background:var(--gold);transition:width 0.6s ease;}
+.tracker-step{flex:1;text-align:center;position:relative;z-index:2;}
+.tracker-dot{width:26px;height:26px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid var(--border);}
+.tracker-dot.done{background:var(--gold);border-color:var(--gold);color:#fff;}
+.tracker-dot.active{background:var(--white);border-color:var(--gold);color:var(--gold);}
+.tracker-dot.upcoming{background:var(--surface);border-color:var(--border);color:var(--muted-2);}
+.tracker-label{font-size:11px;font-weight:500;color:var(--ink);}
+.tracker-sub{font-size:10px;color:var(--muted);}
+
+/* PAYMENT TABLE */
+.pay-table{width:100%;font-size:0.85rem;border-collapse:collapse;}
+.pay-table th{text-align:left;padding:0.5rem 0;font-size:0.72rem;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);}
+.pay-table td{padding:0.75rem 0;border-bottom:1px solid var(--border);vertical-align:middle;}
+.pay-table tr:last-child td{border-bottom:none;}
+
+/* SUPPORT */
+.support-item{padding:1rem;background:var(--surface);border-radius:var(--radius-lg);margin-bottom:0.75rem;border:1px solid var(--border);}
+.support-item:last-child{margin-bottom:0;}
+.support-item-header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:0.5rem;}
+.support-subject{font-size:0.9rem;font-weight:500;color:var(--ink);}
+.support-meta{font-size:0.78rem;color:var(--muted);}
+.support-reply{margin-top:0.75rem;padding:0.75rem;background:var(--surface-2);border-radius:var(--radius);border-left:3px solid var(--gold);font-size:0.85rem;color:var(--ink-3);}
+
+/* ADMIN TABS */
+.admin-tabs{display:flex;gap:0.25rem;background:var(--surface-2);border-radius:var(--radius-lg);padding:0.25rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.admin-tab{padding:0.6rem 1.25rem;border-radius:var(--radius);border:none;background:transparent;font-family:var(--ff-body);font-size:0.82rem;font-weight:500;color:var(--muted);cursor:pointer;transition:0.2s;}
+.admin-tab.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,0.1);}
+
+/* ADMIN TABLE */
+.admin-table{width:100%;font-size:0.85rem;border-collapse:collapse;}
+.admin-table th{text-align:left;padding:0.6rem 0.75rem;font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);background:var(--surface);}
+.admin-table td{padding:0.875rem 0.75rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+.admin-table tr:last-child td{border-bottom:none;}
+.admin-table tr:hover td{background:var(--surface);}
+select.status-select{font-size:0.75rem;padding:0.25rem 0.5rem;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--white);font-family:var(--ff-body);cursor:pointer;}
+
+/* REVENUE BARS */
+.rev-bar-wrap{display:flex;flex-direction:column;gap:0.875rem;}
+.rev-bar-row{display:flex;align-items:center;gap:1rem;}
+.rev-bar-label{font-size:0.8rem;color:var(--muted);width:110px;flex-shrink:0;}
+.rev-bar-track{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+.rev-bar-fill{height:100%;border-radius:4px;background:var(--gold);transition:width 0.8s ease;}
+.rev-bar-val{font-size:0.8rem;font-weight:500;width:80px;text-align:right;flex-shrink:0;}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,0.5);padding:4rem 2rem 2rem;}
+.footer-inner{max-width:var(--max);margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3rem;padding-bottom:3rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.footer-brand .logo img{height:36px;filter:brightness(0) invert(1);}
+.footer-brand .logo-fallback{color:#fff;}
+.footer-brand p{font-size:0.84rem;line-height:1.8;max-width:240px;margin-top:0.75rem;}
+.footer-col-title{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.9);margin-bottom:1rem;font-weight:500;}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:0.55rem;}
+.footer-links a,.footer-links span,.footer-links button{font-size:0.84rem;color:rgba(255,255,255,0.5);text-decoration:none;transition:color 0.2s;cursor:pointer;background:none;border:none;font-family:var(--ff-body);text-align:left;}
+.footer-links a:hover,.footer-links button:hover{color:var(--gold-light);}
+.footer-bottom{padding-top:2rem;display:flex;justify-content:space-between;align-items:center;font-size:0.76rem;flex-wrap:wrap;gap:1rem;}
+.footer-socials{display:flex;gap:0.75rem;}
+.footer-social{width:34px;height:34px;border:1px solid rgba(255,255,255,0.12);border-radius:2px;display:flex;align-items:center;justify-content:center;text-decoration:none;color:rgba(255,255,255,0.5);transition:0.2s;}
+.footer-social:hover{border-color:var(--gold);color:var(--gold-light);}
+
+/* TOAST */
+.toast{position:fixed;top:1.5rem;right:1.5rem;z-index:9999;background:var(--green);color:white;padding:0.875rem 1.5rem;border-radius:var(--radius-lg);font-size:0.875rem;font-weight:500;display:none;max-width:320px;line-height:1.5;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.toast.error{background:var(--red);}
+.toast.visible{display:block;}
+
+/* WA FAB */
+.wa-fab{position:fixed;bottom:2rem;right:2rem;z-index:999;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:transform 0.2s;animation:waPulse 2.5s ease-in-out infinite;}
+.wa-fab:hover{transform:scale(1.08);animation:none;}
+.wa-fab svg{width:26px;height:26px;fill:white;}
+@keyframes waPulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4);}50%{box-shadow:0 4px 32px rgba(37,211,102,0.7);}}
+
+/* REVEAL */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity 0.6s cubic-bezier(0.16,1,0.3,1),transform 0.6s cubic-bezier(0.16,1,0.3,1);}
+[data-reveal].visible{opacity:1;transform:translateY(0);}
+[data-delay="1"]{transition-delay:0.08s;}[data-delay="2"]{transition-delay:0.16s;}
+[data-delay="3"]{transition-delay:0.24s;}[data-delay="4"]{transition-delay:0.32s;}
+[data-delay="5"]{transition-delay:0.4s;}[data-delay="6"]{transition-delay:0.48s;}
+[data-delay="7"]{transition-delay:0.56s;}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.services-grid{grid-template-columns:repeat(2,1fr);}.footer-top{grid-template-columns:1fr 1fr;gap:2rem;}.db-stats{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){
+  .hero-section{grid-template-columns:1fr;min-height:auto;}
+  .hero-left{padding:4rem 1.5rem 3rem;}
+  .hero-left-inner{max-width:100%;margin:0;}
+  .hero-right{min-height:320px;}
+  .hero-float-card{display:none;}
+  .ps-grid,.pricing-grid,.contact-layout{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .db-stats{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:600px){section{padding:4rem 1.25rem;}.services-grid{grid-template-columns:1fr;}.hero-stats{flex-wrap:wrap;gap:1.5rem;}.footer-top{grid-template-columns:1fr;}.footer-bottom{flex-direction:column;text-align:center;}.db-stats{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -724,383 +333,527 @@
 <!-- NAV -->
 <nav id="navbar">
   <div class="nav-inner">
-    <a href="#home" class="logo">Summit<span>Web</span></a>
+    <div class="logo" onclick="showPage('home')">
+      <img src="logo.png" alt="Summit Web" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+      <span class="logo-fallback" style="display:none;align-items:center;gap:0.4rem;">
+        <span class="logo-icon-s">S</span>Summit<span class="gold">Web</span>
+      </span>
+    </div>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#services">Services</a></li>
-      <li><a href="#process">Our Process</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-      <li><a href="#testimonials">Clients</a></li>
-      <li><a href="#contact" class="nav-cta">Get Started</a></li>
+      <li><a onclick="showPage('home')">Home</a></li>
+      <li><a onclick="showPage('pricing')">Pricing</a></li>
+      <li><a onclick="showPage('contact')">Contact</a></li>
+      <li id="authNavItem"><a onclick="showPage('login')" class="nav-cta">Sign In</a></li>
     </ul>
-    <button class="hamburger" id="hamburger" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="toast" id="toast"></div>
 
-<!-- HERO -->
-<section id="home">
-  <div class="hero-bg-circle"></div>
-  <div class="hero-content" style="max-width: none; padding-left: calc((100% - 1160px)/2 + 2rem);">
-    <div class="hero-eyebrow" data-reveal>Nigeria's Digital Partner</div>
-    <h1 class="hero-h1" data-reveal data-delay="1">
-      Build Your Business<br /><em>Online, Beautifully.</em>
-    </h1>
-    <p class="hero-sub" data-reveal data-delay="2">
-      We craft professional websites, mobile apps, and digital experiences that drive real growth — without the complexity, confusion, or broken promises.
-    </p>
-    <div class="hero-actions" data-reveal data-delay="3">
-      <a href="#contact" class="btn-primary">Start Your Project &rarr;</a>
-      <a href="#services" class="btn-secondary">See Our Work</a>
+<!-- ════════════════ HOME ════════════════ -->
+<div id="page-home" class="page">
+  <div class="hero-section">
+    <div class="hero-left">
+      <div class="hero-left-inner">
+        <div class="hero-eyebrow" data-reveal>Nigeria's Digital Partner</div>
+        <h1 class="hero-h1" data-reveal data-delay="1">Go Digital<br /><em>Without the Headache.</em></h1>
+        <p class="hero-sub" data-reveal data-delay="2">Taking your business online shouldn't require learning a new language. We make it simple to attract customers and drive sales, so you can stay focused on what you do best. It's time to reach your summit!</p>
+        <div class="hero-actions" data-reveal data-delay="3">
+          <button class="btn-primary" onclick="showPage('pricing')">Get Your Custom Plan &rarr;</button>
+          <button class="btn-secondary" onclick="showPage('contact')">Free Consultation</button>
+        </div>
+        <div class="hero-stats" data-reveal data-delay="4">
+          <div><span class="hero-stat-num">50+</span><span class="hero-stat-label">Businesses Served</span></div>
+          <div><span class="hero-stat-num">98%</span><span class="hero-stat-label">Client Satisfaction</span></div>
+          <div><span class="hero-stat-num">&lt;1min</span><span class="hero-stat-label">Support Response</span></div>
+        </div>
+      </div>
     </div>
-    <div class="hero-stats" data-reveal data-delay="4">
-      <div>
-        <span class="hero-stat-num">50+</span>
-        <span class="hero-stat-label">Projects Delivered</span>
-      </div>
-      <div>
-        <span class="hero-stat-num">98%</span>
-        <span class="hero-stat-label">Client Satisfaction</span>
-      </div>
-      <div>
-        <span class="hero-stat-num">5&thinsp;yrs</span>
-        <span class="hero-stat-label">Industry Experience</span>
+    <div class="hero-right">
+      <svg viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;">
+        <rect width="600" height="700" fill="#111111"/>
+        <defs>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff08" stroke-width="1"/></pattern>
+          <radialGradient id="glow1" cx="70%" cy="30%" r="50%"><stop offset="0%" stop-color="#C9A84C" stop-opacity="0.18"/><stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/></radialGradient>
+          <radialGradient id="glow2" cx="20%" cy="75%" r="40%"><stop offset="0%" stop-color="#C9A84C" stop-opacity="0.10"/><stop offset="100%" stop-color="#C9A84C" stop-opacity="0"/></radialGradient>
+        </defs>
+        <rect width="600" height="700" fill="url(#grid)"/>
+        <rect width="600" height="700" fill="url(#glow1)"/>
+        <rect width="600" height="700" fill="url(#glow2)"/>
+        <circle cx="480" cy="120" r="180" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.12"/>
+        <circle cx="480" cy="120" r="130" fill="none" stroke="#C9A84C" stroke-width="0.5" opacity="0.1"/>
+        <g transform="translate(80,160)">
+          <rect x="20" y="0" width="340" height="220" rx="12" fill="#242424" stroke="#C9A84C" stroke-width="1.5" opacity="0.9"/>
+          <rect x="20" y="0" width="340" height="16" rx="12" fill="#2E2E2E"/>
+          <circle cx="192" cy="8" r="3" fill="#C9A84C" opacity="0.6"/>
+          <rect x="32" y="20" width="316" height="188" rx="4" fill="#1A1A1A"/>
+          <rect x="32" y="20" width="316" height="28" rx="4" fill="#242424"/>
+          <rect x="42" y="30" width="48" height="8" rx="2" fill="#C9A84C" opacity="0.7"/>
+          <rect x="240" y="30" width="30" height="8" rx="2" fill="#444"/>
+          <rect x="278" y="30" width="30" height="8" rx="2" fill="#444"/>
+          <rect x="316" y="27" width="24" height="13" rx="2" fill="#C9A84C" opacity="0.5"/>
+          <rect x="32" y="52" width="316" height="80" fill="#1E1E1E"/>
+          <rect x="48" y="64" width="120" height="10" rx="2" fill="#ffffff" opacity="0.7"/>
+          <rect x="48" y="80" width="90" height="7" rx="2" fill="#C9A84C" opacity="0.5"/>
+          <rect x="48" y="94" width="140" height="5" rx="2" fill="#444"/>
+          <rect x="48" y="104" width="110" height="5" rx="2" fill="#444"/>
+          <rect x="48" y="118" width="60" height="16" rx="3" fill="#C9A84C" opacity="0.8"/>
+          <rect x="32" y="136" width="96" height="60" rx="4" fill="#242424" stroke="#333" stroke-width="1"/>
+          <rect x="136" y="136" width="96" height="60" rx="4" fill="#242424" stroke="#333" stroke-width="1"/>
+          <rect x="240" y="136" width="108" height="60" rx="4" fill="#C9A84C" opacity="0.15" stroke="#C9A84C" stroke-width="0.8"/>
+          <rect x="44" y="148" width="40" height="5" rx="2" fill="#C9A84C" opacity="0.5"/>
+          <rect x="44" y="158" width="60" height="4" rx="2" fill="#555"/>
+          <rect x="148" y="148" width="40" height="5" rx="2" fill="#C9A84C" opacity="0.5"/>
+          <rect x="148" y="158" width="60" height="4" rx="2" fill="#555"/>
+          <rect x="252" y="148" width="40" height="5" rx="2" fill="#C9A84C" opacity="0.8"/>
+          <rect x="252" y="158" width="60" height="4" rx="2" fill="#C9A84C" opacity="0.3"/>
+          <rect x="0" y="224" width="380" height="14" rx="4" fill="#2E2E2E"/>
+          <rect x="140" y="234" width="100" height="6" rx="3" fill="#242424"/>
+        </g>
+        <g transform="translate(320,90)">
+          <rect width="190" height="72" rx="10" fill="#1E1E1E" stroke="#C9A84C" stroke-width="1" opacity="0.95"/>
+          <rect x="14" y="14" width="20" height="20" rx="4" fill="#C9A84C" opacity="0.2"/>
+          <path d="M19 24 l5-5 3 3 5-6" stroke="#C9A84C" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="44" y="25" font-family="'DM Sans',sans-serif" font-size="9" fill="#9A9A9A" letter-spacing="1">LATEST PROJECT</text>
+          <text x="44" y="40" font-family="'Fraunces',serif" font-size="18" font-weight="700" fill="#ffffff">Live</text>
+          <circle cx="80" cy="38" r="4" fill="#16a34a"/>
+          <text x="14" y="58" font-family="'DM Sans',sans-serif" font-size="8.5" fill="#6B6B6B">E-Commerce Store · Abuja</text>
+        </g>
+        <g transform="translate(30,430)">
+          <rect width="175" height="80" rx="10" fill="#1E1E1E" stroke="#C9A84C" stroke-width="1" opacity="0.95"/>
+          <text x="14" y="28" font-family="'DM Sans',sans-serif" font-size="9" fill="#9A9A9A" letter-spacing="1">CLIENT GROWTH</text>
+          <text x="14" y="52" font-family="'Fraunces',serif" font-size="26" font-weight="700" fill="#C9A84C">+150%</text>
+          <text x="14" y="68" font-family="'DM Sans',sans-serif" font-size="8.5" fill="#6B6B6B">Online sales in 2 months</text>
+        </g>
+        <g transform="translate(370,490)">
+          <rect width="175" height="80" rx="10" fill="#C9A84C" opacity="0.95"/>
+          <text x="14" y="28" font-family="'DM Sans',sans-serif" font-size="9" fill="#5C3D00" letter-spacing="1">SUPPORT</text>
+          <text x="14" y="52" font-family="'Fraunces',serif" font-size="26" font-weight="700" fill="#111">&lt;1 min</text>
+          <text x="14" y="68" font-family="'DM Sans',sans-serif" font-size="8.5" fill="#5C3D00">Average response time</text>
+        </g>
+        <circle cx="60" cy="100" r="3" fill="#C9A84C" opacity="0.4"/>
+        <circle cx="75" cy="115" r="2" fill="#C9A84C" opacity="0.25"/>
+        <circle cx="520" cy="400" r="4" fill="#C9A84C" opacity="0.3"/>
+        <rect x="0" y="695" width="600" height="5" fill="#C9A84C" opacity="0.6"/>
+      </svg>
+      <div class="hero-float-card">
+        <div class="float-card-label">Client Result</div>
+        <div class="float-card-val">150% Growth</div>
+        <div class="float-card-sub">Online sales — 2 months</div>
       </div>
     </div>
   </div>
 
-  <div class="hero-visual">
-    <img
-      src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=900&q=80&auto=format&fit=crop"
-      alt="Professional team working on digital solutions"
-      loading="eager"
-    />
-    <div class="hero-visual-overlay"></div>
-    <div class="hero-card">
-      <div class="hero-card-label">Latest Project</div>
-      <div class="hero-card-val">Live ✓</div>
-      <div class="hero-card-sub">E-Commerce Store — Abuja</div>
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="marquee-dot">✦</span>Business Branding</span><span class="marquee-item"><span class="marquee-dot">✦</span>Website Design</span><span class="marquee-item"><span class="marquee-dot">✦</span>SEO</span><span class="marquee-item"><span class="marquee-dot">✦</span>Graphic Design</span><span class="marquee-item"><span class="marquee-dot">✦</span>Advertisement</span><span class="marquee-item"><span class="marquee-dot">✦</span>Social Media Management</span><span class="marquee-item"><span class="marquee-dot">✦</span>Full AI Setup</span>
+      <span class="marquee-item"><span class="marquee-dot">✦</span>Business Branding</span><span class="marquee-item"><span class="marquee-dot">✦</span>Website Design</span><span class="marquee-item"><span class="marquee-dot">✦</span>SEO</span><span class="marquee-item"><span class="marquee-dot">✦</span>Graphic Design</span><span class="marquee-item"><span class="marquee-dot">✦</span>Advertisement</span><span class="marquee-item"><span class="marquee-dot">✦</span>Social Media Management</span><span class="marquee-item"><span class="marquee-dot">✦</span>Full AI Setup</span>
     </div>
   </div>
-</section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap" aria-hidden="true">
-  <div class="marquee-track" id="marquee">
-    <span class="marquee-item"><span>✦</span> Web Design</span>
-    <span class="marquee-item"><span>✦</span> Mobile Apps</span>
-    <span class="marquee-item"><span>✦</span> E-Commerce</span>
-    <span class="marquee-item"><span>✦</span> SEO & Growth</span>
-    <span class="marquee-item"><span>✦</span> Branding</span>
-    <span class="marquee-item"><span>✦</span> UI/UX Design</span>
-    <span class="marquee-item"><span>✦</span> Maintenance</span>
-    <span class="marquee-item"><span>✦</span> Web Design</span>
-    <span class="marquee-item"><span>✦</span> Mobile Apps</span>
-    <span class="marquee-item"><span>✦</span> E-Commerce</span>
-    <span class="marquee-item"><span>✦</span> SEO & Growth</span>
-    <span class="marquee-item"><span>✦</span> Branding</span>
-    <span class="marquee-item"><span>✦</span> UI/UX Design</span>
-    <span class="marquee-item"><span>✦</span> Maintenance</span>
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <p class="trust-label">Trusted by 50+ Nigerian businesses across industries</p>
+      <div class="trust-logos">
+        <div class="trust-logo">Retail</div><div class="trust-logo">Healthcare</div><div class="trust-logo">Real Estate</div><div class="trust-logo">Education</div><div class="trust-logo">Finance</div><div class="trust-logo">Hospitality</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="ps-section">
+    <div class="container">
+      <div class="section-tag" data-reveal>The Real Challenge</div>
+      <h2 class="section-h2" data-reveal data-delay="1">Why Most Nigerian Businesses<br /><em>Struggle Online</em></h2>
+      <div class="ps-grid">
+        <div class="ps-card problem" data-reveal data-delay="2">
+          <div class="ps-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:2rem;height:2rem;color:var(--red);"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+          <h3>The Problem</h3>
+          <p>Overwhelmed by tech jargon, low online sales, and wasting time on DIY marketing? You're losing customers while trying to figure it all out alone.</p>
+        </div>
+        <div class="ps-card solution" data-reveal data-delay="3">
+          <div class="ps-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:2rem;height:2rem;color:var(--green);"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
+          <h3>The Solution</h3>
+          <p>Summit Web gives you a complete digital team — from branding to social growth — without the headache. We speak human, not code. Your success is our priority.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section">
+    <div class="container">
+      <div class="section-tag" data-reveal>What We Do</div>
+      <h2 class="section-h2" data-reveal data-delay="1">Our <em>Services</em></h2>
+      <p class="section-lead" data-reveal data-delay="2">Everything your business needs to stand out, grow online, and convert visitors into paying customers.</p>
+      <div class="services-grid">
+        <div class="service-card" data-reveal data-delay="1"><div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h3>Business Branding</h3><p>Look professional, attract premium clients with a memorable brand identity.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="2"><div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div><h3>Website Design</h3><p>Fast, mobile-ready sites that convert visitors into paying customers.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="3"><div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></div><h3>Search Engine Optimization</h3><p>Get found on Google when customers search for your services.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="4"><div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div><h3>Graphic Design</h3><p>Scroll-stopping visuals that make your brand stand out online.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="5"><div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Advertisement</h3><p>Turn clicks into cash with targeted ad campaigns that deliver ROI.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="6"><div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div><h3>Social Media Management</h3><p>Consistent engagement &amp; growth across all your social platforms.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="7"><div class="svc-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><h3>Social Media Optimization</h3><p>Optimized bios, highlights &amp; hashtag strategy for maximum reach.</p><div class="svc-arrow">↗</div></div>
+        <div class="service-card" data-reveal data-delay="1"><div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10"/></svg></div><h3>Full AI Setup</h3><p>AI tools to automate lead generation, replies, and marketing tasks.</p><div class="svc-arrow">↗</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial-section">
+    <div class="container">
+      <div class="section-tag" style="justify-content:center;" data-reveal>Client Story</div>
+      <h2 class="section-h2" style="text-align:center;" data-reveal data-delay="1">What Our <em>Clients Say</em></h2>
+      <div class="testimonial-card" data-reveal data-delay="2">
+        <div class="testi-quote">&ldquo;</div>
+        <p class="testi-text">Summit Web grew our online sales by 150% in 2 months. Finally, a team that gets it! No jargon, just results. I can finally focus on my business.</p>
+        <div style="margin-bottom:1rem;"><svg viewBox="0 0 120 24" fill="#fbbf24" xmlns="http://www.w3.org/2000/svg" style="height:18px;width:auto;"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/><path d="M36 2l2.4 7.4H46l-6.2 4.5 2.4 7.4L36 17l-6.2 4.3 2.4-7.4L26 9.4h7.6z"/><path d="M60 2l2.4 7.4H70l-6.2 4.5 2.4 7.4L60 17l-6.2 4.3 2.4-7.4L50 9.4h7.6z"/><path d="M84 2l2.4 7.4H92l-6.2 4.5 2.4 7.4L84 17l-6.2 4.3 2.4-7.4L74 9.4h7.6z"/><path d="M108 2l2.4 7.4H118l-6.2 4.5 2.4 7.4L108 17l-6.2 4.3 2.4-7.4L98 9.4h7.6z"/></svg></div>
+        <div class="testi-author">Amara O.</div>
+        <div class="testi-role">Lagos Fashion Brand Owner</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-banner">
+    <div class="container">
+      <h2 data-reveal>Ready to Reach Your Summit?</h2>
+      <p data-reveal data-delay="1">Stop struggling with digital marketing. Let's make it simple together. Your first consultation is completely free.</p>
+      <button class="btn-gold" onclick="showPage('contact')" data-reveal data-delay="2">Book Your Free Consultation &rarr;</button>
+    </div>
   </div>
 </div>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="container">
-    <div class="services-intro">
-      <div class="section-tag" data-reveal>What We Do</div>
-      <h2 class="section-h2" data-reveal data-delay="1">Everything Your <em>Business Needs</em><br />to Thrive Online</h2>
-      <p class="section-lead" data-reveal data-delay="2">From a sleek landing page to a full-featured web platform — we handle every aspect of your digital presence so you can focus on running your business.</p>
-    </div>
-    <div class="services-grid">
-      <div class="service-card" data-reveal data-delay="1">
-        <div class="service-icon">🌐</div>
-        <div class="service-title">Professional Website Design</div>
-        <p class="service-desc">Custom-designed, mobile-first websites that load fast and convert visitors into customers. Every pixel crafted for your brand.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-      <div class="service-card" data-reveal data-delay="2">
-        <div class="service-icon">📱</div>
-        <div class="service-title">Mobile App Development</div>
-        <p class="service-desc">iOS and Android apps built with Flutter — one codebase, two platforms, seamless performance and native-quality experience.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-      <div class="service-card" data-reveal data-delay="3">
-        <div class="service-icon">🛒</div>
-        <div class="service-title">E-Commerce Solutions</div>
-        <p class="service-desc">Full online stores with product catalogues, secure payments, and order management. Start selling across Nigeria and globally.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-      <div class="service-card" data-reveal data-delay="4">
-        <div class="service-icon">🔍</div>
-        <div class="service-title">SEO & Digital Marketing</div>
-        <p class="service-desc">Get found on Google. We optimise your site so your ideal customers discover you before they find your competitors.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-      <div class="service-card" data-reveal data-delay="5">
-        <div class="service-icon">🎨</div>
-        <div class="service-title">Brand Identity Design</div>
-        <p class="service-desc">Logo, colour palette, typography, and brand guidelines. We build the visual identity that makes your business memorable.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-      <div class="service-card" data-reveal data-delay="6">
-        <div class="service-icon">🛡️</div>
-        <div class="service-title">Hosting & Maintenance</div>
-        <p class="service-desc">Fast, secure hosting with regular updates, backups, and dedicated support. Your site stays live, secure, and up to date — always.</p>
-        <div class="service-arrow">↗</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section id="process">
-  <div class="container">
-    <div class="section-tag" data-reveal>How We Work</div>
-    <h2 class="section-h2" data-reveal data-delay="1">A Proven Process.<br /><em>Zero Headaches.</em></h2>
-    <p class="section-lead" data-reveal data-delay="2">We guide you through every step from idea to launch — clearly, on time, and within budget.</p>
-
-    <div class="process-layout">
-      <div class="process-steps">
-        <div class="process-step" data-reveal>
-          <div class="step-num">01</div>
-          <div>
-            <div class="step-title">Discovery & Strategy</div>
-            <p class="step-desc">We listen first. We learn about your business, goals, and audience before we touch a single line of code or design.</p>
-          </div>
+<!-- ════════════════ PRICING ════════════════ -->
+<div id="page-pricing" class="page">
+  <section class="pricing-section" style="padding-top:calc(var(--nav-h) + 4rem);">
+    <div class="container">
+      <div class="section-tag" data-reveal>Simple, Transparent Pricing</div>
+      <h2 class="section-h2" data-reveal data-delay="1">Choose Your <em>Perfect Plan</em></h2>
+      <p class="section-lead" data-reveal data-delay="2">All plans include a free brand consultation, unlimited Q&amp;A, and priority support. No hidden fees, no surprises.</p>
+      <div class="pricing-grid">
+        <div class="pricing-card" data-reveal data-delay="1">
+          <div class="plan-name">Summit Essential</div>
+          <div class="plan-price">&#8358;8,000</div>
+          <div class="plan-period">per month</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-features">
+            <li><span class="chk">&#10003;</span> Branding Consultation</li>
+            <li><span class="chk">&#10003;</span> Full AI Setup</li>
+            <li><span class="crs">&#10007;</span> Website</li>
+            <li><span class="crs">&#10007;</span> Social Media Setup</li>
+            <li><span class="chk">&#10003;</span> Unlimited Q&amp;A</li>
+            <li><span class="chk">&#10003;</span> Priority Support</li>
+          </ul>
+          <button class="plan-btn" onclick="initiatePayment(this,'essential')">Pay Now &rarr;</button>
         </div>
-        <div class="process-step" data-reveal data-delay="1">
-          <div class="step-num">02</div>
-          <div>
-            <div class="step-title">Design & Prototype</div>
-            <p class="step-desc">You see exactly what you're getting before it's built. We present a full design prototype for your approval and feedback.</p>
-          </div>
+        <div class="pricing-card featured" data-reveal data-delay="2">
+          <div class="popular-badge"><svg viewBox="0 0 24 24" fill="var(--ink)" stroke="none" style="width:10px;height:10px;display:inline;margin-right:4px;vertical-align:middle;"><path d="M12 2c0 0-4 4-4 8 0 2.5 1.5 4.5 4 5.5-1-1.5-1-3 0-4 1 1.5 3 2 3 4.5 1.5-1 2.5-3 2.5-5C17.5 6 12 2 12 2z"/></svg> Most Popular</div>
+          <div class="plan-name">Summit Growth</div>
+          <div class="plan-price">&#8358;18,080</div>
+          <div class="plan-period">per month</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-features">
+            <li><span class="chk">&#10003;</span> Branding Consultation</li>
+            <li><span class="chk">&#10003;</span> Full AI Setup</li>
+            <li><span class="chk">&#10003;</span> Mini Website</li>
+            <li><span class="chk">&#10003;</span> Social Media Setup</li>
+            <li><span class="crs">&#10007;</span> Advanced Website</li>
+            <li><span class="chk">&#10003;</span> Unlimited Q&amp;A</li>
+            <li><span class="chk">&#10003;</span> Priority Support</li>
+          </ul>
+          <button class="plan-btn" onclick="initiatePayment(this,'growth')">Pay Now &rarr;</button>
         </div>
-        <div class="process-step" data-reveal data-delay="2">
-          <div class="step-num">03</div>
-          <div>
-            <div class="step-title">Development & Testing</div>
-            <p class="step-desc">Our engineers build your site to be fast, secure, and scalable. Tested on all devices before we hand it over.</p>
-          </div>
-        </div>
-        <div class="process-step" data-reveal data-delay="3">
-          <div class="step-num">04</div>
-          <div>
-            <div class="step-title">Launch & Support</div>
-            <p class="step-desc">We go live together. And we stay with you — updates, edits, and support are always just a message away.</p>
-          </div>
+        <div class="pricing-card" data-reveal data-delay="3">
+          <div class="plan-name">Summit 360</div>
+          <div class="plan-price">&#8358;45,080</div>
+          <div class="plan-period">per month</div>
+          <div class="plan-divider"></div>
+          <ul class="plan-features">
+            <li><span class="chk">&#10003;</span> Branding Consultation</li>
+            <li><span class="chk">&#10003;</span> Full AI Setup</li>
+            <li><span class="chk">&#10003;</span> Advanced Website</li>
+            <li><span class="chk">&#10003;</span> Social Media Setup</li>
+            <li><span class="chk">&#10003;</span> Unlimited Q&amp;A</li>
+            <li><span class="chk">&#10003;</span> Priority Support</li>
+          </ul>
+          <button class="plan-btn" onclick="initiatePayment(this,'360')">Pay Now &rarr;</button>
         </div>
       </div>
-      <div class="process-visual" data-reveal data-delay="2">
-        <img
-          src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=700&q=80&auto=format&fit=crop"
-          alt="Team collaborating on digital project"
-        />
-        <div class="process-visual-badge">Trusted by businesses across Nigeria</div>
+      <div style="margin-top:5rem;">
+        <div class="section-tag" data-reveal>FAQs</div>
+        <h2 class="section-h2" data-reveal data-delay="1">Frequently Asked <em>Questions</em></h2>
+        <div style="max-width:760px;margin:2rem auto 0;">
+          <div class="faq-item" data-reveal data-delay="1"><button class="faq-q" onclick="toggleFAQ(this)">How fast will my website be ready?<span class="faq-icon">+</span></button><div class="faq-a">Your website will be ready in 7–14 days, depending on the complexity. We prioritise speed without compromising quality. You'll receive regular updates throughout the process.</div></div>
+          <div class="faq-item" data-reveal data-delay="2"><button class="faq-q" onclick="toggleFAQ(this)">Can I switch plans later?<span class="faq-icon">+</span></button><div class="faq-a">Absolutely! You can upgrade or downgrade your plan anytime. We'll make the transition seamless with no disruption to your service.</div></div>
+          <div class="faq-item" data-reveal data-delay="3"><button class="faq-q" onclick="toggleFAQ(this)">What is "Full AI Setup"?<span class="faq-icon">+</span></button><div class="faq-a">We integrate AI tools to automate lead generation, customer replies, and marketing tasks — saving you time and increasing efficiency across your business.</div></div>
+          <div class="faq-item" data-reveal data-delay="4"><button class="faq-q" onclick="toggleFAQ(this)">Is there a setup fee?<span class="faq-icon">+</span></button><div class="faq-a">No setup fees at all! You only pay the monthly investment for your chosen plan. We believe in transparency — what you see is what you pay.</div></div>
+          <div class="faq-item" data-reveal data-delay="5"><button class="faq-q" onclick="toggleFAQ(this)">What kind of support do you offer?<span class="faq-icon">+</span></button><div class="faq-a">All plans include priority support via WhatsApp, phone calls, and email. Our typical response time is under 1 minute during business hours (Mon–Fri, 9am–6pm WAT).</div></div>
+        </div>
+      </div>
+      <div class="cta-banner" style="border-radius:var(--radius-lg);margin-top:4rem;">
+        <h2>15-Day Risk-Free Trial</h2>
+        <p>Try Summit Essential for 15 days. If you don't see progress, cancel anytime. No questions asked.</p>
+        <button class="btn-gold" onclick="showPage('contact')">Start Risk-Free Today &rarr;</button>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- PRICING -->
-<section id="pricing">
-  <div class="container">
-    <div class="section-tag" data-reveal>Transparent Pricing</div>
-    <h2 class="section-h2" data-reveal data-delay="1">Simple Packages.<br /><em>No Hidden Fees.</em></h2>
-    <p class="section-lead" data-reveal data-delay="2">Choose the plan that fits your business. All packages include responsive design, SSL certificate, and 30 days of free post-launch support.</p>
-
-    <div class="pricing-grid">
-      <!-- Starter -->
-      <div class="pricing-card" data-reveal data-delay="1">
-        <div class="plan-name">Starter</div>
-        <div class="plan-price">₦150k</div>
-        <div class="plan-price-note">One-time payment</div>
-        <div class="plan-divider"></div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Up to 5-page website</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Mobile responsive design</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Contact form integration</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Google Maps & social links</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Basic SEO setup</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> 30-day free support</div>
-        <a href="#contact" class="plan-cta">Get Started</a>
-      </div>
-
-      <!-- Business (Featured) -->
-      <div class="pricing-card featured" data-reveal data-delay="2">
-        <div class="featured-badge">Most Popular</div>
-        <div class="plan-name">Business</div>
-        <div class="plan-price">₦350k</div>
-        <div class="plan-price-note">One-time payment</div>
-        <div class="plan-divider"></div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Up to 15-page website</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Custom UI/UX design</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Blog / News section</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> WhatsApp & CRM integration</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Advanced SEO & analytics</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> 90-day free support</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Speed & performance tuning</div>
-        <a href="#contact" class="plan-cta">Get Started</a>
-      </div>
-
-      <!-- Enterprise -->
-      <div class="pricing-card" data-reveal data-delay="3">
-        <div class="plan-name">Enterprise</div>
-        <div class="plan-price">Custom</div>
-        <div class="plan-price-note">Let's talk about your needs</div>
-        <div class="plan-divider"></div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Full e-commerce / web app</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Mobile app (iOS & Android)</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Custom backend & database</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Payment gateway integration</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Dedicated project manager</div>
-        <div class="plan-feature"><span class="plan-check">✓</span> Ongoing retainer support</div>
-        <a href="#contact" class="plan-cta">Request a Quote</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="container">
-    <div class="section-tag" data-reveal>Client Stories</div>
-    <h2 class="section-h2" data-reveal data-delay="1">What Our Clients <em>Say About Us</em></h2>
-    <div class="testimonials-grid">
-      <div class="testimonial-card" data-reveal data-delay="1">
-        <div class="testimonial-quote">&ldquo;</div>
-        <p class="testimonial-text">Summit Web completely transformed our online presence. Within two months of launching our new site, we tripled our inbound enquiries. Professional, fast, and genuinely helpful team.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">AO</div>
-          <div>
-            <div class="author-name">Adaeze Okonkwo</div>
-            <div class="author-role">CEO, Okonkwo Logistics — Abuja</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card" data-reveal data-delay="2">
-        <div class="testimonial-quote">&ldquo;</div>
-        <p class="testimonial-text">I was sceptical at first, but they delivered exactly what they promised — on time and without the usual back-and-forth stress. My e-commerce store now ships nationwide every week.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">IB</div>
-          <div>
-            <div class="author-name">Ibrahim Bello</div>
-            <div class="author-role">Founder, Bello Organics — Kano</div>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-card" data-reveal data-delay="3">
-        <div class="testimonial-quote">&ldquo;</div>
-        <p class="testimonial-text">The mobile app Summit Web built for us works flawlessly on both Android and iPhone. Our customers love it, and it has saved us hours of manual admin work every week.</p>
-        <div class="testimonial-author">
-          <div class="author-avatar">NU</div>
-          <div>
-            <div class="author-name">Ngozi Uche</div>
-            <div class="author-role">Director, Uche Realty — Lagos</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="container">
-    <div class="contact-layout">
-      <div>
-        <div class="section-tag" data-reveal>Get in Touch</div>
-        <h2 class="section-h2" data-reveal data-delay="1">Ready to Go <em>Digital?</em></h2>
-        <p class="section-lead" data-reveal data-delay="2" style="margin-bottom: 2.5rem;">Tell us about your project and we'll get back to you within 24 hours. No pressure, no jargon — just a straight conversation about what you need.</p>
-
-        <div class="contact-info-item" data-reveal data-delay="3">
-          <div class="contact-icon">📞</div>
-          <div>
-            <div class="contact-label">Phone / WhatsApp</div>
-            <a href="tel:+2349048747185" class="contact-val">+234 904 874 7185</a>
-          </div>
-        </div>
-        <div class="contact-info-item" data-reveal data-delay="4">
-          <div class="contact-icon">✉️</div>
-          <div>
-            <div class="contact-label">Email</div>
-            <a href="mailto:summitweb33@gmail.com" class="contact-val">summitweb33@gmail.com</a>
-          </div>
-        </div>
-        <div class="contact-info-item" data-reveal data-delay="5">
-          <div class="contact-icon">📍</div>
-          <div>
-            <div class="contact-label">Location</div>
-            <span class="contact-val">Jos, Plateau State, Nigeria</span>
-          </div>
-        </div>
-      </div>
-
-      <div data-reveal data-delay="2">
-        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
-          <div class="form-row">
-            <div class="form-field">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" name="fname" placeholder="Emeka" required />
+<!-- ════════════════ CONTACT ════════════════ -->
+<div id="page-contact" class="page">
+  <section class="contact-section" style="padding-top:calc(var(--nav-h) + 4rem);">
+    <div class="container">
+      <div class="section-tag" data-reveal>Let's Talk</div>
+      <h2 class="section-h2" data-reveal data-delay="1">Let's Build Your <em>Digital Summit</em></h2>
+      <p class="section-lead" data-reveal data-delay="2">Tell us about your business, and we'll design a custom roadmap that fits your budget and goals.</p>
+      <div class="contact-layout">
+        <div data-reveal data-delay="1">
+          <h3 style="font-family:var(--ff-head);font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:1.25rem;">Get Your Free Proposal</h3>
+          <form class="contact-form" id="contactForm" onsubmit="submitContact(event)">
+            <div class="form-row">
+              <div class="form-field"><label>Full Name *</label><input type="text" id="cf-name" placeholder="Emeka Obi" required /></div>
+              <div class="form-field"><label>Business Name *</label><input type="text" id="cf-business" placeholder="Your Business" required /></div>
+            </div>
+            <div class="form-row">
+              <div class="form-field"><label>Email Address *</label><input type="email" id="cf-email" placeholder="emeka@yourbusiness.com" required /></div>
+              <div class="form-field"><label>Phone Number *</label><input type="tel" id="cf-phone" placeholder="+234 800 000 0000" required /></div>
             </div>
             <div class="form-field">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" name="lname" placeholder="Obi" required />
+              <label>Service Interest</label>
+              <select id="cf-plan">
+                <option value="">Select a plan…</option>
+                <option value="essential">Summit Essential — &#8358;8,000/month</option>
+                <option value="growth">Summit Growth — &#8358;18,080/month (Most Popular)</option>
+                <option value="360">Summit 360 — &#8358;45,080/month</option>
+                <option value="unsure">Not sure yet — Help me decide</option>
+              </select>
             </div>
+            <div class="form-field"><label>Brief Message (Optional)</label><textarea id="cf-message" placeholder="Tell us about your business and what you're hoping to achieve…"></textarea></div>
+            <button type="submit" class="form-submit" id="cf-submit">Send &amp; Get a Free Proposal &rarr;</button>
+          </form>
+        </div>
+        <div data-reveal data-delay="2">
+          <h3 style="font-family:var(--ff-head);font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;">Prefer to reach out directly?</h3>
+          <div class="contact-methods">
+            <a href="https://wa.me/2349048747185" target="_blank" rel="noopener" class="contact-method"><div class="cmethod-icon"><svg viewBox="0 0 24 24" fill="white" style="width:22px;height:22px;"><path d="M20.5 3.5A12 12 0 003.5 20.5L2 22l1.5-3.5A12 12 0 1020.5 3.5zM12 21a9 9 0 110-18 9 9 0 010 18zm4.9-6.3c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.6.1-.7.8-.8.9-.3.2-.5.1a6.4 6.4 0 01-1.9-1.2 6.9 6.9 0 01-1.3-1.6c-.1-.2 0-.4.1-.5s.2-.3.3-.4.1-.2.2-.4 0-.3 0-.4-.6-1.3-.8-1.8-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.1 5 5 0 001 2.6 11.5 11.5 0 004.4 3.9c.6.3 1 .4 1.4.5a3.4 3.4 0 001.5.1 2.7 2.7 0 001.8-1.2 2.1 2.1 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg></div><div><div class="cmethod-label">WhatsApp Chat</div><div class="cmethod-val">Quick WhatsApp Chat</div><div class="cmethod-sub">We're just a message away!</div></div></a>
+            <a href="tel:+2349048747185" class="contact-method"><div class="cmethod-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.02 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></div><div><div class="cmethod-label">Call Us Directly</div><div class="cmethod-val">+234 904 874 7185</div><div class="cmethod-sub">Mon–Fri, 9am–6pm WAT</div></div></a>
+            <a href="mailto:summitweb33@gmail.com" class="contact-method"><div class="cmethod-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="cmethod-label">Send an Email</div><div class="cmethod-val">summitweb33@gmail.com</div><div class="cmethod-sub">We reply within 2 hours</div></div></a>
+            <div class="contact-method" style="cursor:default;"><div class="cmethod-icon"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="cmethod-label">Our Location</div><div class="cmethod-val">Jos, Plateau State, Nigeria</div><div class="cmethod-sub">Serving businesses worldwide</div></div></div>
           </div>
-          <div class="form-field">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="emeka@yourbusiness.com" required />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════ LOGIN ════════════════ -->
+<div id="page-login" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card" data-reveal>
+      <h2>Welcome Back</h2>
+      <p>Sign in to manage your Summit Web subscription.</p>
+      <form class="auth-form" onsubmit="handleLogin(event)">
+        <div class="form-field"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@example.com" required /></div>
+        <div class="form-field"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••" required /></div>
+        <button type="submit" class="auth-submit" id="loginBtn">Sign In</button>
+      </form>
+      <div class="auth-footer">Don't have an account? <a onclick="showPage('signup')">Sign up free</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SIGNUP ════════════════ -->
+<div id="page-signup" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card" data-reveal>
+      <h2>Create Account</h2>
+      <p>Join Summit Web and take your business digital.</p>
+      <form class="auth-form" onsubmit="handleSignup(event)">
+        <div class="form-field"><label>Full Name</label><input type="text" id="signupName" placeholder="Emeka Obi" required /></div>
+        <div class="form-field"><label>Email Address</label><input type="email" id="signupEmail" placeholder="you@example.com" required /></div>
+        <div class="form-field"><label>Password</label><input type="password" id="signupPassword" placeholder="Min. 8 characters" required /></div>
+        <button type="submit" class="auth-submit" id="signupBtn">Create Account</button>
+      </form>
+      <div class="auth-footer">Already have an account? <a onclick="showPage('login')">Sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ CUSTOMER DASHBOARD ════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="db-wrap">
+    <div class="db-inner">
+      <div class="db-header">
+        <div class="db-h1">My Dashboard<span id="db-welcome"></span></div>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <button class="btn-primary btn-sm" onclick="showPage('pricing')">Upgrade Plan</button>
+          <button class="btn-secondary btn-sm" onclick="logout()">Sign Out</button>
+        </div>
+      </div>
+
+      <!-- Subscription status -->
+      <div class="db-card" id="db-sub-card">
+        <p style="color:var(--muted);font-size:0.9rem;">Loading…</p>
+      </div>
+
+      <!-- Project tracker -->
+      <div class="db-card" id="db-tracker-card" style="display:none;">
+        <h3>Project Delivery Tracker</h3>
+        <div class="tracker" id="db-tracker">
+          <div class="tracker-line"></div>
+          <div class="tracker-fill" id="tracker-fill" style="width:0%;"></div>
+        </div>
+        <p id="db-project-note" style="font-size:0.85rem;color:var(--muted);margin-top:1rem;"></p>
+      </div>
+
+      <!-- Monthly report placeholder -->
+      <div class="db-card">
+        <h3>Monthly Report</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <div style="text-align:center;padding:1rem;background:var(--surface);border-radius:var(--radius-lg);">
+            <div style="font-family:var(--ff-head);font-size:1.6rem;font-weight:700;color:var(--ink);">—</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.25rem;">Website Visits</div>
+            <div style="font-size:0.7rem;color:var(--muted-2);margin-top:0.25rem;">Coming soon</div>
           </div>
-          <div class="form-field">
-            <label for="service">Service Interested In</label>
-            <select id="service" name="service">
-              <option value="">— Select a service —</option>
-              <option>Website Design</option>
-              <option>Mobile App Development</option>
-              <option>E-Commerce Store</option>
-              <option>SEO & Digital Marketing</option>
-              <option>Brand Identity Design</option>
-              <option>Hosting & Maintenance</option>
-              <option>Something Else</option>
-            </select>
+          <div style="text-align:center;padding:1rem;background:var(--surface);border-radius:var(--radius-lg);">
+            <div style="font-family:var(--ff-head);font-size:1.6rem;font-weight:700;color:var(--ink);">—</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.25rem;">Social Reach</div>
+            <div style="font-size:0.7rem;color:var(--muted-2);margin-top:0.25rem;">Coming soon</div>
           </div>
-          <div class="form-field">
-            <label for="message">Tell Us About Your Project</label>
-            <textarea id="message" name="message" placeholder="Describe your business, what you need, and when you'd like to get started…" required></textarea>
+          <div style="text-align:center;padding:1rem;background:var(--surface);border-radius:var(--radius-lg);">
+            <div style="font-family:var(--ff-head);font-size:1.6rem;font-weight:700;color:var(--ink);">—</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.25rem;">Google Ranking</div>
+            <div style="font-size:0.7rem;color:var(--muted-2);margin-top:0.25rem;">Coming soon</div>
           </div>
-          <button type="submit" class="form-submit" id="submitBtn">Send Message &rarr;</button>
-          <p id="formMsg" style="font-size:0.85rem; color: var(--gold-dark); display:none; margin-top:0.5rem;"></p>
-        </form>
+        </div>
+        <p style="font-size:0.8rem;color:var(--muted-2);margin-top:1rem;">Reports will be updated monthly by your Summit Web team.</p>
+      </div>
+
+      <!-- Payment history -->
+      <div class="db-card">
+        <h3>Payment History</h3>
+        <div id="db-payments"><p style="color:var(--muted);font-size:0.9rem;">Loading…</p></div>
+      </div>
+
+      <!-- Support requests -->
+      <div class="db-card">
+        <div class="db-row" style="margin-bottom:1.25rem;">
+          <h3 style="margin-bottom:0;">Support &amp; Requests</h3>
+          <button class="btn-primary btn-sm" onclick="toggleSupportForm()">+ New Request</button>
+        </div>
+        <div id="support-form-wrap" style="display:none;margin-bottom:1.25rem;">
+          <div class="form-field" style="margin-bottom:0.75rem;"><label>Subject</label><input type="text" id="sup-subject" placeholder="e.g. Update my homepage banner" /></div>
+          <div class="form-field" style="margin-bottom:0.75rem;"><label>Message</label><textarea id="sup-message" style="min-height:80px;" placeholder="Describe what you need…"></textarea></div>
+          <button class="btn-primary btn-sm" onclick="submitSupport()">Send Request</button>
+          <button class="btn-secondary btn-sm" onclick="toggleSupportForm()" style="margin-left:0.5rem;">Cancel</button>
+        </div>
+        <div id="db-support"><p style="color:var(--muted);font-size:0.9rem;">Loading…</p></div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="db-card">
+        <h3>Quick Actions</h3>
+        <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+          <a href="https://wa.me/2349048747185" target="_blank" rel="noopener" class="btn-primary btn-sm">WhatsApp Us</a>
+          <button class="btn-secondary btn-sm" onclick="showPage('pricing')">Change Plan</button>
+          <button class="btn-danger btn-sm" onclick="cancelSub()">Cancel Subscription</button>
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
+
+<!-- ════════════════ ADMIN LOGIN ════════════════ -->
+<div id="page-admin-login" class="page">
+  <div class="auth-wrap">
+    <div class="auth-card" data-reveal>
+      <h2>Admin Access</h2>
+      <p>This area is for Summit Web team only.</p>
+      <form class="auth-form" onsubmit="handleAdminLogin(event)">
+        <div class="form-field"><label>Admin Password</label><input type="password" id="adminPassword" placeholder="••••••••" required /></div>
+        <button type="submit" class="auth-submit" id="adminLoginBtn">Enter Dashboard</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ ADMIN DASHBOARD ════════════════ -->
+<div id="page-admin" class="page">
+  <div class="db-wrap">
+    <div class="db-inner" style="max-width:1100px;">
+      <div class="db-header">
+        <div class="db-h1">Admin Dashboard<span>Summit Web — Owner View</span></div>
+        <button class="btn-secondary btn-sm" onclick="adminLogout()">Sign Out</button>
+      </div>
+
+      <!-- Stats -->
+      <div class="db-stats" id="admin-stats">
+        <div class="db-stat"><div class="db-stat-num" id="as-revenue">—</div><div class="db-stat-label">Revenue This Month</div><div class="db-stat-sub sub-up" id="as-revenue-sub"></div></div>
+        <div class="db-stat"><div class="db-stat-num" id="as-clients">—</div><div class="db-stat-label">Active Clients</div><div class="db-stat-sub sub-up" id="as-clients-sub"></div></div>
+        <div class="db-stat"><div class="db-stat-num" id="as-leads">—</div><div class="db-stat-label">New Leads</div><div class="db-stat-sub sub-warn" id="as-leads-sub"></div></div>
+        <div class="db-stat"><div class="db-stat-num" id="as-churn">—</div><div class="db-stat-label">Cancellations</div><div class="db-stat-sub sub-dn" id="as-churn-sub"></div></div>
+      </div>
+
+      <!-- Revenue by plan -->
+      <div class="db-card" id="admin-rev-card">
+        <h3>Revenue by Plan</h3>
+        <div class="rev-bar-wrap" id="admin-rev-bars"></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="adminTab('clients',this)">All Clients</button>
+        <button class="admin-tab" onclick="adminTab('leads',this)">Leads</button>
+        <button class="admin-tab" onclick="adminTab('support',this)">Support Queue</button>
+      </div>
+
+      <!-- Clients tab -->
+      <div id="admin-clients-tab" class="db-card">
+        <h3>Active Clients</h3>
+        <div style="overflow-x:auto;"><table class="admin-table" id="admin-clients-table"><tr><th>Client</th><th>Email</th><th>Plan</th><th>Status</th><th>Stage</th><th>Since</th></tr></table></div>
+      </div>
+
+      <!-- Leads tab -->
+      <div id="admin-leads-tab" class="db-card" style="display:none;">
+        <h3>Contact Form Leads</h3>
+        <div style="overflow-x:auto;"><table class="admin-table" id="admin-leads-table"><tr><th>Name</th><th>Email</th><th>Phone</th><th>Plan</th><th>Message</th><th>Status</th><th>Date</th></tr></table></div>
+      </div>
+
+      <!-- Support tab -->
+      <div id="admin-support-tab" class="db-card" style="display:none;">
+        <h3>Support Queue</h3>
+        <div id="admin-support-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <a href="#home" class="logo">Summit<span>Web</span></a>
-        <p>Nigeria's simple, headache-free digital partner. We build beautiful websites and apps that help your business grow.</p>
+        <div class="logo" onclick="showPage('home')" style="margin-bottom:0.875rem;">
+          <img src="logo.png" alt="Summit Web" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="height:36px;filter:brightness(0) invert(1);" />
+          <span class="logo-fallback" style="display:none;color:#fff;gap:0.4rem;">
+            <span class="logo-icon-s" style="background:rgba(255,255,255,0.12);">S</span>Summit<span class="gold">Web</span>
+          </span>
+        </div>
+        <p>Nigeria's simple, headache-free digital partner. We make it easy for businesses to go digital and grow online.</p>
       </div>
       <div>
         <div class="footer-col-title">Services</div>
         <ul class="footer-links">
-          <li><a href="#services">Website Design</a></li>
-          <li><a href="#services">Mobile Apps</a></li>
-          <li><a href="#services">E-Commerce</a></li>
-          <li><a href="#services">SEO & Marketing</a></li>
-          <li><a href="#services">Brand Identity</a></li>
+          <li><button onclick="showPage('home')">Business Branding</button></li>
+          <li><button onclick="showPage('home')">Website Design</button></li>
+          <li><button onclick="showPage('home')">SEO</button></li>
+          <li><button onclick="showPage('home')">Social Media</button></li>
+          <li><button onclick="showPage('home')">Advertisement</button></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-title">Company</div>
         <ul class="footer-links">
-          <li><a href="#process">Our Process</a></li>
-          <li><a href="#testimonials">Client Stories</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#contact">Contact Us</a></li>
+          <li><button onclick="showPage('pricing')">Pricing</button></li>
+          <li><button onclick="showPage('contact')">Contact Us</button></li>
+          <li><button onclick="showPage('login')">Client Login</button></li>
         </ul>
       </div>
       <div>
@@ -1109,65 +862,381 @@
           <li><a href="tel:+2349048747185">+234 904 874 7185</a></li>
           <li><a href="mailto:summitweb33@gmail.com">summitweb33@gmail.com</a></li>
           <li><a href="https://wa.me/2349048747185" target="_blank" rel="noopener">WhatsApp Us</a></li>
-          <li><a href="#">Jos, Plateau State, NG</a></li>
+          <li><span>Jos, Plateau State, Nigeria</span></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2026 Summit Web. All rights reserved.</span>
+      <span>&copy; 2026 Summit Web &mdash; Nigeria's simple, headache-free digital partner.</span>
       <div class="footer-socials">
-        <a href="https://wa.me/2349048747185" target="_blank" rel="noopener" class="footer-social" aria-label="WhatsApp">W</a>
-        <a href="mailto:summitweb33@gmail.com" class="footer-social" aria-label="Email">@</a>
-        <a href="tel:+2349048747185" class="footer-social" aria-label="Call">☎</a>
+        <a href="https://wa.me/2349048747185" target="_blank" rel="noopener" class="footer-social" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M20.5 3.5A12 12 0 003.5 20.5L2 22l1.5-3.5A12 12 0 1020.5 3.5zM12 21a9 9 0 110-18 9 9 0 010 18zm4.9-6.3c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.6.1-.7.8-.8.9-.3.2-.5.1a6.4 6.4 0 01-1.9-1.2 6.9 6.9 0 01-1.3-1.6c-.1-.2 0-.4.1-.5l.3-.4.2-.4v-.4c-.1-.5-.7-1.8-.9-2.2-.2-.4-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.1 5 5 0 001 2.6 11.5 11.5 0 004.4 3.9c.6.3 1 .4 1.4.5a3.4 3.4 0 001.5.1 2.7 2.7 0 001.8-1.2 2.1 2.1 0 00.1-1.2c-.1-.1-.3-.2-.5-.3z"/></svg></a>
+        <a href="mailto:summitweb33@gmail.com" class="footer-social" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        <a href="tel:+2349048747185" class="footer-social" aria-label="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8 19.79 19.79 0 01.02 2.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/></svg></a>
       </div>
     </div>
   </div>
 </footer>
 
-<!-- WHATSAPP FAB -->
 <a href="https://wa.me/2349048747185" target="_blank" rel="noopener" class="wa-fab" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 .5C7.44.5.5 7.44.5 16c0 2.72.69 5.28 1.91 7.52L.5 31.5l8.24-1.87A15.47 15.47 0 0016 31.5C24.56 31.5 31.5 24.56 31.5 16S24.56.5 16 .5zm0 28.27a12.74 12.74 0 01-6.58-1.82l-.47-.28-4.89 1.11 1.15-4.74-.31-.49A12.77 12.77 0 1116 28.77zm7.02-9.56c-.38-.19-2.27-1.12-2.62-1.25-.35-.13-.6-.19-.86.19s-.99 1.25-1.21 1.51-.45.29-.83.1a10.48 10.48 0 01-3.09-1.91 11.62 11.62 0 01-2.14-2.66c-.22-.38-.02-.59.17-.78s.38-.45.57-.67a2.6 2.6 0 00.38-.64.7.7 0 00-.03-.67c-.1-.19-.86-2.07-1.18-2.83-.31-.74-.63-.64-.86-.65h-.73a1.41 1.41 0 00-1.02.48 4.31 4.31 0 00-1.34 3.2 7.49 7.49 0 001.57 3.97 17.17 17.17 0 006.58 5.81c.92.4 1.63.63 2.19.81a5.27 5.27 0 002.43.15 3.96 3.96 0 002.6-1.83 3.21 3.21 0 00.22-1.83c-.09-.16-.35-.26-.73-.45z"/></svg>
 </a>
 
 <script>
-// Hamburger menu
-const ham = document.getElementById('hamburger');
-const nav = document.getElementById('navbar');
-ham.addEventListener('click', () => nav.classList.toggle('open'));
-document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+const API='https://summit-web-api.onrender.com';
+const PAGES=['home','pricing','contact','login','signup','dashboard','admin-login','admin'];
+const STAGES=['strategy','design','build','review','live'];
+const STAGE_LABELS={strategy:'Strategy',design:'Design',build:'Build',review:'Review',live:'Live'};
 
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-}, { threshold: 0.1 });
-document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
-
-// Hero reveal on load
-setTimeout(() => {
-  document.querySelectorAll('.hero-content [data-reveal]').forEach(el => el.classList.add('visible'));
-}, 100);
-
-// Navbar scroll style
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').style.background = window.scrollY > 50 ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.88)';
-});
-
-// Form handling
-function handleSubmit(e) {
-  e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const msg = document.getElementById('formMsg');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.textContent = 'Send Message →';
-    btn.disabled = false;
-    msg.style.display = 'block';
-    msg.textContent = '✓ Message sent! We will get back to you within 24 hours.';
-    document.getElementById('contactForm').reset();
-    setTimeout(() => { msg.style.display = 'none'; }, 6000);
-  }, 1500);
+// ── ROUTING ──
+function showPage(page){
+  PAGES.forEach(p=>{const el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===page);});
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('navLinks').classList.remove('nav-open');
+  updateNav();
+  if(page==='dashboard')loadDashboard();
+  if(page==='admin')loadAdmin();
+  setTimeout(triggerReveal,60);
 }
+
+// ── NAV ──
+function updateNav(){
+  const ai=document.getElementById('authNavItem');
+  if(isLoggedIn()){
+    ai.innerHTML='<a onclick="showPage(\'dashboard\')">Dashboard</a>';
+  } else {
+    ai.innerHTML='<a onclick="showPage(\'login\')" class="nav-cta">Sign In</a>';
+  }
+}
+
+// ── AUTH HELPERS ──
+function isLoggedIn(){try{return!!localStorage.getItem('swt');}catch{return false;}}
+function getToken(){try{return localStorage.getItem('swt');}catch{return null;}}
+function setToken(t){try{localStorage.setItem('swt',t);}catch{}}
+function clearToken(){try{localStorage.removeItem('swt');}catch{}}
+function getAdminToken(){try{return localStorage.getItem('swat');}catch{return null;}}
+function setAdminToken(t){try{localStorage.setItem('swat',t);}catch{}}
+function clearAdminToken(){try{localStorage.removeItem('swat');}catch{}}
+
+function logout(){clearToken();updateNav();showPage('home');showToast('Signed out successfully.');}
+function adminLogout(){clearAdminToken();showPage('home');}
+
+// ── CUSTOMER AUTH ──
+function handleLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('loginBtn');btn.textContent='Signing in…';btn.disabled=true;
+  fetch(API+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:document.getElementById('loginEmail').value,password:document.getElementById('loginPassword').value})})
+  .then(r=>r.json()).then(d=>{btn.textContent='Sign In';btn.disabled=false;if(d.success){setToken(d.token);updateNav();showPage('dashboard');}else showToast(d.message||'Login failed.',true);})
+  .catch(()=>{btn.textContent='Sign In';btn.disabled=false;showToast('Network error.',true);});
+}
+function handleSignup(e){
+  e.preventDefault();
+  const btn=document.getElementById('signupBtn');btn.textContent='Creating…';btn.disabled=true;
+  fetch(API+'/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('signupName').value,email:document.getElementById('signupEmail').value,password:document.getElementById('signupPassword').value})})
+  .then(r=>r.json()).then(d=>{btn.textContent='Create Account';btn.disabled=false;if(d.success){setToken(d.token);updateNav();showPage('dashboard');}else showToast(d.message||'Signup failed.',true);})
+  .catch(()=>{btn.textContent='Create Account';btn.disabled=false;showToast('Network error.',true);});
+}
+
+// ── CUSTOMER DASHBOARD ──
+function loadDashboard(){
+  if(!isLoggedIn()){showPage('login');return;}
+  fetch(API+'/api/auth/profile',{headers:{'Authorization':'Bearer '+getToken()}})
+  .then(r=>r.json()).then(d=>{
+    if(!d.success){clearToken();showPage('login');return;}
+    document.getElementById('db-welcome').textContent=' — Welcome, '+d.user.name;
+    renderSubCard(d.subscription);
+    renderTracker(d.subscription);
+    renderPayments(d.payments||[]);
+    renderSupport(d.supportRequests||[]);
+  }).catch(()=>showToast('Could not load dashboard.',true));
+}
+
+function renderSubCard(sub){
+  const el=document.getElementById('db-sub-card');
+  if(!sub||sub.status==='inactive'){
+    el.innerHTML='<h3>Subscription</h3><div class="db-row"><div><span class="badge badge-inactive">No Active Plan</span></div><button class="btn-primary btn-sm" onclick="showPage(\'pricing\')">Choose a Plan &rarr;</button></div><p style="font-size:0.85rem;color:var(--muted);margin-top:1rem;">Subscribe to get started with your digital journey.</p>';
+    return;
+  }
+  if(sub.status==='cancelled'){
+    el.innerHTML='<h3>Subscription</h3><div class="db-row"><div><span class="badge badge-cancelled">Cancelled</span><span style="font-size:0.85rem;color:var(--muted);margin-left:0.75rem;">'+planLabel(sub.plan)+'</span></div><button class="btn-primary btn-sm" onclick="showPage(\'pricing\')">Resubscribe</button></div>';
+    return;
+  }
+  const start=new Date(sub.startDate);
+  const next=new Date(start);next.setMonth(next.getMonth()+1);
+  el.innerHTML=`<h3>Your Subscription</h3>
+    <div class="db-row">
+      <div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:0.25rem;">Current Plan</div>
+        <div style="font-family:var(--ff-head);font-size:1.3rem;font-weight:700;">${planLabel(sub.plan)}</div>
+      </div>
+      <span class="badge badge-active">Active</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.25rem;">
+      <div style="background:var(--surface);border-radius:var(--radius);padding:0.875rem;">
+        <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Started</div>
+        <div style="font-weight:500;margin-top:0.25rem;">${start.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);padding:0.875rem;">
+        <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Next Billing</div>
+        <div style="font-weight:500;margin-top:0.25rem;">${next.toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</div>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);padding:0.875rem;">
+        <div style="font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Monthly Cost</div>
+        <div style="font-weight:500;margin-top:0.25rem;">${planPrice(sub.plan)}</div>
+      </div>
+    </div>`;
+}
+
+function renderTracker(sub){
+  if(!sub||sub.status!=='active'){document.getElementById('db-tracker-card').style.display='none';return;}
+  const card=document.getElementById('db-tracker-card');card.style.display='block';
+  const stage=sub.projectStage||'strategy';
+  const idx=STAGES.indexOf(stage);
+  const pct=idx===0?0:idx===STAGES.length-1?100:Math.round((idx/(STAGES.length-1))*100);
+  document.getElementById('tracker-fill').style.width=pct+'%';
+  const container=document.getElementById('db-tracker');
+  // remove old steps
+  container.querySelectorAll('.tracker-step').forEach(s=>s.remove());
+  STAGES.forEach((s,i)=>{
+    const done=i<idx,active=i===idx;
+    const step=document.createElement('div');step.className='tracker-step';
+    step.innerHTML=`<div class="tracker-dot ${done?'done':active?'active':'upcoming'}">${done?'&#10003;':i+1}</div>
+      <div class="tracker-label">${STAGE_LABELS[s]}</div>
+      <div class="tracker-sub">${done?'Done':active?'In progress':'Upcoming'}</div>`;
+    container.appendChild(step);
+  });
+  const note=document.getElementById('db-project-note');
+  note.textContent=sub.projectNote?'Update from Summit Web: '+sub.projectNote:'';
+}
+
+function renderPayments(payments){
+  const el=document.getElementById('db-payments');
+  if(!payments.length){el.innerHTML='<p style="color:var(--muted);font-size:0.9rem;">No payments yet.</p>';return;}
+  el.innerHTML='<table class="pay-table"><thead><tr><th>Date</th><th>Plan</th><th>Amount</th><th>Status</th></tr></thead><tbody>'+
+    payments.map(p=>`<tr><td>${new Date(p.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</td><td>${planLabel(p.plan)}</td><td>&#8358;${Number(p.amount).toLocaleString()}</td><td><span class="badge badge-active">Paid</span></td></tr>`).join('')+
+  '</tbody></table>';
+}
+
+function renderSupport(reqs){
+  const el=document.getElementById('db-support');
+  if(!reqs.length){el.innerHTML='<p style="color:var(--muted);font-size:0.9rem;">No support requests yet. Use the button above to send one.</p>';return;}
+  el.innerHTML=reqs.map(r=>`
+    <div class="support-item">
+      <div class="support-item-header">
+        <div class="support-subject">${r.subject}</div>
+        <span class="badge badge-${r.status==='open'?'open':r.status==='in_review'?'review':'resolved'}">${r.status.replace('_',' ')}</span>
+      </div>
+      <div class="support-meta">${new Date(r.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</div>
+      ${r.reply?`<div class="support-reply"><strong>Summit Web:</strong> ${r.reply}</div>`:''}
+    </div>`).join('');
+}
+
+function toggleSupportForm(){
+  const w=document.getElementById('support-form-wrap');w.style.display=w.style.display==='none'?'block':'none';
+}
+function submitSupport(){
+  const subject=document.getElementById('sup-subject').value.trim();
+  const message=document.getElementById('sup-message').value.trim();
+  if(!subject||!message){showToast('Please fill in both fields.',true);return;}
+  fetch(API+'/api/support',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify({subject,message})})
+  .then(r=>r.json()).then(d=>{if(d.success){showToast('Request sent! We will respond shortly.');toggleSupportForm();document.getElementById('sup-subject').value='';document.getElementById('sup-message').value='';loadDashboard();}else showToast(d.message||'Error.',true);})
+  .catch(()=>showToast('Network error.',true));
+}
+function cancelSub(){
+  if(!confirm('Are you sure you want to cancel your subscription? Your services will stop.'))return;
+  fetch(API+'/api/subscription/cancel',{method:'POST',headers:{'Authorization':'Bearer '+getToken()}})
+  .then(r=>r.json()).then(d=>{if(d.success){showToast('Subscription cancelled.');loadDashboard();}else showToast(d.message,true);})
+  .catch(()=>showToast('Error. Please WhatsApp us.',true));
+}
+
+// ── PAYMENT ──
+function initiatePayment(btn,plan){
+  if(!isLoggedIn()){showToast('Please sign in first.');showPage('login');return;}
+  btn.textContent='Loading…';btn.disabled=true;
+  fetch(API+'/api/subscription/initiate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getToken()},body:JSON.stringify({plan})})
+  .then(r=>r.json()).then(d=>{btn.textContent='Pay Now →';btn.disabled=false;if(d.success&&d.paymentUrl)window.open(d.paymentUrl,'_blank');else showToast(d.message||'Could not initiate payment.',true);})
+  .catch(()=>{btn.textContent='Pay Now →';btn.disabled=false;showToast('Network error.',true);});
+}
+
+// ── CONTACT ──
+function submitContact(e){
+  e.preventDefault();
+  const btn=document.getElementById('cf-submit');btn.textContent='Sending…';btn.disabled=true;
+  fetch(API+'/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:document.getElementById('cf-name').value+' ('+document.getElementById('cf-business').value+')',email:document.getElementById('cf-email').value,phone:document.getElementById('cf-phone').value,plan:document.getElementById('cf-plan').value,message:document.getElementById('cf-message').value})})
+  .then(r=>r.json()).then(()=>{btn.textContent='Send & Get a Free Proposal →';btn.disabled=false;showToast('Message sent! We will contact you within 24 hours.');document.getElementById('contactForm').reset();})
+  .catch(()=>{btn.textContent='Send & Get a Free Proposal →';btn.disabled=false;showToast('Error. Please WhatsApp us instead.',true);});
+}
+
+// ── ADMIN AUTH ──
+function handleAdminLogin(e){
+  e.preventDefault();
+  const btn=document.getElementById('adminLoginBtn');btn.textContent='Verifying…';btn.disabled=true;
+  fetch(API+'/api/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('adminPassword').value})})
+  .then(r=>r.json()).then(d=>{btn.textContent='Enter Dashboard';btn.disabled=false;if(d.success){setAdminToken(d.token);showPage('admin');}else showToast('Wrong password.',true);})
+  .catch(()=>{btn.textContent='Enter Dashboard';btn.disabled=false;showToast('Network error.',true);});
+}
+
+// ── ADMIN DASHBOARD ──
+function loadAdmin(){
+  if(!getAdminToken()){showPage('admin-login');return;}
+  const h={'x-admin-token':getAdminToken()};
+  // Stats
+  fetch(API+'/api/admin/dashboard',{headers:h}).then(r=>r.json()).then(d=>{
+    if(!d.success)return;
+    const s=d.stats;
+    document.getElementById('as-revenue').textContent='&#8358;'+Math.round(s.monthlyRevenue/1000)+'k';
+    document.getElementById('as-revenue-sub').textContent='All time: &#8358;'+Math.round(s.totalRevenue/1000)+'k';
+    document.getElementById('as-clients').textContent=s.activeClients;
+    document.getElementById('as-clients-sub').textContent='+'+s.newThisMonth+' this month';
+    document.getElementById('as-leads').textContent=s.totalLeads;
+    document.getElementById('as-leads-sub').textContent=s.newLeads+' need follow-up';
+    document.getElementById('as-churn').textContent=s.churnThisMonth;
+    document.getElementById('as-churn-sub').textContent='This month';
+    // Revenue bars
+    const total=s.monthlyRevenue||1;
+    document.getElementById('admin-rev-bars').innerHTML=`
+      <div class="rev-bar-row"><div class="rev-bar-label">Summit 360</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:${Math.round((s.byPlan['360']*45080/total)*100)}%;background:var(--gold);"></div></div><div class="rev-bar-val">${s.byPlan['360']} clients</div></div>
+      <div class="rev-bar-row"><div class="rev-bar-label">Summit Growth</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:${Math.round((s.byPlan.growth*18080/total)*100)}%;background:var(--gold-dark);"></div></div><div class="rev-bar-val">${s.byPlan.growth} clients</div></div>
+      <div class="rev-bar-row"><div class="rev-bar-label">Summit Essential</div><div class="rev-bar-track"><div class="rev-bar-fill" style="width:${Math.round((s.byPlan.essential*8000/total)*100)}%;background:var(--gold-light);"></div></div><div class="rev-bar-val">${s.byPlan.essential} clients</div></div>`;
+  });
+  // Clients
+  fetch(API+'/api/admin/clients',{headers:h}).then(r=>r.json()).then(d=>{
+    if(!d.success)return;
+    const t=document.getElementById('admin-clients-table');
+    t.innerHTML='<tr><th>Client</th><th>Email</th><th>Plan</th><th>Status</th><th>Stage</th><th>Since</th></tr>';
+    if(!d.clients.length){t.innerHTML+='<tr><td colspan="6" style="color:var(--muted);padding:1rem 0;">No clients yet.</td></tr>';return;}
+    d.clients.forEach(c=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td><strong>${c.User?c.User.name:'—'}</strong></td>
+        <td style="color:var(--muted);font-size:0.82rem;">${c.User?c.User.email:'—'}</td>
+        <td>${planLabel(c.plan)}</td>
+        <td><span class="badge badge-${c.status}">${c.status}</span></td>
+        <td><span class="badge badge-open">${c.projectStage||'strategy'}</span></td>
+        <td style="color:var(--muted);font-size:0.82rem;">${new Date(c.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</td>`;
+      t.appendChild(tr);
+    });
+  });
+  // Leads
+  fetch(API+'/api/admin/leads',{headers:h}).then(r=>r.json()).then(d=>{
+    if(!d.success)return;
+    const t=document.getElementById('admin-leads-table');
+    t.innerHTML='<tr><th>Name</th><th>Email</th><th>Phone</th><th>Plan</th><th>Message</th><th>Status</th><th>Date</th></tr>';
+    if(!d.leads.length){t.innerHTML+='<tr><td colspan="7" style="color:var(--muted);padding:1rem 0;">No leads yet.</td></tr>';return;}
+    d.leads.forEach(l=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td><strong>${l.name||'—'}</strong></td>
+        <td style="font-size:0.82rem;">${l.email||'—'}</td>
+        <td style="font-size:0.82rem;">${l.phone||'—'}</td>
+        <td style="font-size:0.82rem;">${l.plan||'—'}</td>
+        <td style="font-size:0.82rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${l.message||'—'}</td>
+        <td><select class="status-select" onchange="updateLeadStatus('${l.id}',this.value)">
+          <option value="new" ${l.status==='new'?'selected':''}>New</option>
+          <option value="contacted" ${l.status==='contacted'?'selected':''}>Contacted</option>
+          <option value="converted" ${l.status==='converted'?'selected':''}>Converted</option>
+          <option value="lost" ${l.status==='lost'?'selected':''}>Lost</option>
+        </select></td>
+        <td style="font-size:0.82rem;color:var(--muted);">${new Date(l.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short'})}</td>`;
+      t.appendChild(tr);
+    });
+  });
+  // Support
+  fetch(API+'/api/admin/support',{headers:h}).then(r=>r.json()).then(d=>{
+    if(!d.success)return;
+    const el=document.getElementById('admin-support-list');
+    if(!d.requests.length){el.innerHTML='<p style="color:var(--muted);font-size:0.9rem;">No support requests yet.</p>';return;}
+    el.innerHTML=d.requests.map(r=>`
+      <div class="support-item">
+        <div class="support-item-header">
+          <div>
+            <div class="support-subject">${r.subject}</div>
+            <div class="support-meta">${r.User?r.User.name+' &mdash; '+r.User.email:'Unknown'} &bull; ${new Date(r.createdAt).toLocaleDateString('en-NG',{day:'numeric',month:'short',year:'numeric'})}</div>
+          </div>
+          <span class="badge badge-${r.status==='open'?'open':r.status==='in_review'?'review':'resolved'}">${r.status.replace('_',' ')}</span>
+        </div>
+        <p style="font-size:0.875rem;color:var(--muted);margin:0.5rem 0;">${r.message}</p>
+        ${r.reply?`<div class="support-reply"><strong>Your reply:</strong> ${r.reply}</div>`:''}
+        <div style="margin-top:0.875rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <input type="text" placeholder="Type your reply…" id="reply-${r.id}" style="flex:1;padding:0.5rem 0.75rem;border:1px solid var(--border-strong);border-radius:var(--radius);font-family:var(--ff-body);font-size:0.85rem;outline:none;min-width:160px;" />
+          <button class="btn-primary btn-sm" onclick="sendReply('${r.id}')">Send Reply</button>
+          <select class="status-select" onchange="updateSupportStatus('${r.id}',this.value)">
+            <option value="open" ${r.status==='open'?'selected':''}>Open</option>
+            <option value="in_review" ${r.status==='in_review'?'selected':''}>In Review</option>
+            <option value="resolved" ${r.status==='resolved'?'selected':''}>Resolved</option>
+          </select>
+        </div>
+      </div>`).join('');
+  });
+}
+
+function adminTab(tab,btn){
+  ['clients','leads','support'].forEach(t=>{
+    const el=document.getElementById('admin-'+t+'-tab');if(el)el.style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateLeadStatus(id,status){
+  fetch(API+'/api/admin/leads/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-token':getAdminToken()},body:JSON.stringify({status})})
+  .then(r=>r.json()).then(d=>{if(d.success)showToast('Lead updated.');else showToast('Error.',true);})
+  .catch(()=>showToast('Network error.',true));
+}
+
+function sendReply(id){
+  const reply=document.getElementById('reply-'+id).value.trim();
+  if(!reply){showToast('Please type a reply first.',true);return;}
+  fetch(API+'/api/admin/support/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-token':getAdminToken()},body:JSON.stringify({reply,status:'in_review'})})
+  .then(r=>r.json()).then(d=>{if(d.success){showToast('Reply sent!');loadAdmin();}else showToast('Error.',true);})
+  .catch(()=>showToast('Network error.',true));
+}
+
+function updateSupportStatus(id,status){
+  fetch(API+'/api/admin/support/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-token':getAdminToken()},body:JSON.stringify({status})})
+  .then(r=>r.json()).then(d=>{if(d.success)showToast('Status updated.');else showToast('Error.',true);})
+  .catch(()=>showToast('Network error.',true));
+}
+
+// ── FAQ ──
+function toggleFAQ(btn){
+  const a=btn.nextElementSibling,open=a.classList.contains('faq-open');
+  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('faq-open'));
+  document.querySelectorAll('.faq-q').forEach(x=>x.classList.remove('faq-open'));
+  if(!open){a.classList.add('faq-open');btn.classList.add('faq-open');}
+}
+
+// ── TOAST ──
+function showToast(msg,isErr){
+  const t=document.getElementById('toast');t.textContent=msg;
+  t.className='toast'+(isErr?' error':'')+' visible';
+  setTimeout(()=>t.className='toast',5000);
+}
+
+// ── HELPERS ──
+function planLabel(p){return{essential:'Summit Essential',growth:'Summit Growth','360':'Summit 360'}[p]||p;}
+function planPrice(p){return{essential:'&#8358;8,000/mo',growth:'&#8358;18,080/mo','360':'&#8358;45,080/mo'}[p]||'—';}
+
+// ── REVEAL ──
+function triggerReveal(){
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+  document.querySelectorAll('.page.active [data-reveal]').forEach(el=>{
+    el.classList.remove('visible');
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight*0.95)el.classList.add('visible');else obs.observe(el);
+  });
+}
+
+// ── NAV scroll + hamburger ──
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40));
+document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('nav-open'));
+const mst=document.createElement('style');
+mst.textContent=`#navLinks.nav-open{display:flex!important;flex-direction:column;position:absolute;top:var(--nav-h);left:0;right:0;background:var(--white);border-bottom:1px solid var(--border);padding:1.5rem 2rem;gap:1.25rem;z-index:100;}`;
+document.head.appendChild(mst);
+
+// ── INIT ──
+const urlP=new URLSearchParams(window.location.search);
+const startPage=urlP.get('page')||'home';
+// Secret admin entry: go to /?admin=1
+if(urlP.get('admin')==='1'){showPage('admin-login');}
+else{showPage(startPage);}
 </script>
 </body>
 </html>
